@@ -79,7 +79,12 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post(`${API}/auth/register-referent`, referentData);
+      // Concatena TCS-REF- com o ano digitado
+      const fullCode = `TCS-REF-${referentData.code_secret}`;
+      await axios.post(`${API}/auth/register-referent`, {
+        ...referentData,
+        code_secret: fullCode
+      });
       setReferentEmail(referentData.email);
       setShowReferentVerification(true);
       toast.success('Code envoyé à votre email!');
