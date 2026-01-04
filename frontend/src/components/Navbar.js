@@ -22,9 +22,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-3" data-testid="navbar-logo">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B35] to-[#10B981] rounded-full flex items-center justify-center shadow-lg">
-              <Trophy className="w-7 h-7 text-white" />
-            </div>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
+              alt="TCS Suzini Logo" 
+              className="w-12 h-12 rounded-full shadow-lg"
+            />
             <span className="font-anton text-2xl text-white tracking-wider">TCS SUZINI</span>
           </Link>
 
