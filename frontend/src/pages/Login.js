@@ -133,200 +133,191 @@ export default function Login() {
   };
 
   return (
-    <div className=\"min-h-screen flex items-center justify-center relative overflow-hidden\" 
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" 
          style={{ background: '#1a1f2e' }}>
       <VolleyballFloating />
-      <div className=\"grain-texture absolute inset-0\"></div>
+      <div className="grain-texture absolute inset-0"></div>
       
-      <div className=\"relative z-10 w-full max-w-md mx-4\">
-        <Card className=\"glass-card shadow-2xl border-0\" data-testid=\"login-card\">
-          <CardContent className=\"pt-8 pb-8 px-8\">
-            {/* Logo et titre */}
-            <div className=\"text-center mb-8\">
+      <div className="relative z-10 w-full max-w-md mx-4">
+        <Card className="glass-card shadow-2xl border-0" data-testid="login-card">
+          <CardContent className="pt-8 pb-8 px-8">
+            <div className="text-center mb-8">
               <img 
-                src=\"https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg\" 
-                alt=\"TCS Suzini Logo\" 
-                className=\"w-16 h-16 mx-auto mb-4 rounded-full\"
+                src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
+                alt="TCS Suzini Logo" 
+                className="w-16 h-16 mx-auto mb-4 rounded-full"
               />
-              <h1 className=\"font-anton text-4xl text-[#FF6B35] mb-2\" style={{ letterSpacing: '0.05em' }}>
+              <h1 className="font-anton text-4xl text-[#FF6B35] mb-2" style={{ letterSpacing: '0.05em' }}>
                 TCS de Suzini
               </h1>
-              <p className=\"text-sm text-gray-400\">Beach Volley • L'Arène du Sable</p>
+              <p className="text-sm text-gray-400">Beach Volley</p>
             </div>
 
             {isLoginMode ? (
-              <form onSubmit={handleLogin} className=\"space-y-4\" data-testid=\"login-form\">
+              <form onSubmit={handleLogin} className="space-y-4" data-testid="login-form">
                 <div>
-                  <Label htmlFor=\"email\" className=\"text-gray-300\">Email</Label>
+                  <Label htmlFor="email" className="text-gray-300">Email</Label>
                   <Input
-                    id=\"email\"
-                    type=\"email\"
-                    placeholder=\"votre@email.com\"
+                    id="email"
+                    type="email"
+                    placeholder="votre@email.com"
                     value={loginData.email}
                     onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                     required
-                    className=\"bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1\"
+                    className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
                   />
                 </div>
                 <div>
-                  <Label htmlFor=\"password\" className=\"text-gray-300\">Mot de passe</Label>
+                  <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
                   <Input
-                    id=\"password\"
-                    type=\"password\"
-                    placeholder=\"••••••••\"
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
                     value={loginData.password}
                     onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                     required
-                    className=\"bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1\"
+                    className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
                   />
                 </div>
                 
-                <div className=\"flex items-center space-x-2\">
+                <div className="flex items-center space-x-2">
                   <Checkbox 
-                    id=\"remember\" 
+                    id="remember" 
                     checked={rememberMe}
                     onCheckedChange={setRememberMe}
                   />
-                  <label htmlFor=\"remember\" className=\"text-sm text-gray-400 cursor-pointer\">
+                  <label htmlFor="remember" className="text-sm text-gray-400 cursor-pointer">
                     Se souvenir de moi
                   </label>
                 </div>
 
-                <Button type=\"submit\" className=\"w-full btn-primary\" disabled={isLoading}>
+                <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
                   {isLoading ? 'CONNEXION...' : 'SE CONNECTER'}
                 </Button>
-                
-                <Button 
-                  type=\"button\" 
-                  onClick={() => setIsLoginMode(false)}
-                  className=\"w-full btn-secondary\" 
-                >
-                  SE CONNECTER EN TANT QU'INVITÉ
-                </Button>
 
-                <div className=\"flex justify-between text-sm mt-4\">
+                <div className="flex justify-between text-sm mt-4">
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={() => setShowForgotPassword(true)}
-                    className=\"text-gray-400 hover:text-[#FF6B35] transition-colors\"
+                    className="text-gray-400 hover:text-[#FF6B35] transition-colors"
                   >
                     Mot de passe oublié?
                   </button>
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={() => setIsLoginMode(false)}
-                    className=\"text-gray-400 hover:text-[#10B981] transition-colors\"
+                    className="text-gray-400 hover:text-[#10B981] transition-colors"
                   >
                     Créer un compte
                   </button>
                 </div>
               </form>
             ) : (
-              <div className=\"space-y-4\">
-                <div className=\"flex gap-2 mb-4\">
+              <div className="space-y-4">
+                <div className="flex gap-2 mb-4">
                   <Button 
                     onClick={() => setIsLoginMode(true)} 
-                    variant=\"outline\" 
-                    className=\"flex-1 bg-transparent border-gray-700 text-gray-400 hover:text-white\"
+                    variant="outline" 
+                    className="flex-1 bg-transparent border-gray-700 text-gray-400 hover:text-white"
                   >
                     Connexion
                   </Button>
                   <Button 
-                    variant=\"outline\" 
-                    className=\"flex-1 bg-[#252b3d] border-[#FF6B35] text-[#FF6B35]\"
+                    variant="outline" 
+                    className="flex-1 bg-[#252b3d] border-[#FF6B35] text-[#FF6B35]"
                   >
                     Inscription
                   </Button>
                 </div>
 
-                <form onSubmit={handleRegister} className=\"space-y-4\">
-                  <div className=\"grid grid-cols-2 gap-3\">
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label className=\"text-gray-300 text-sm\">Prénom</Label>
+                      <Label className="text-gray-300 text-sm">Prénom</Label>
                       <Input
                         value={registerData.prenom}
                         onChange={(e) => setRegisterData({ ...registerData, prenom: e.target.value })}
                         required
-                        className=\"bg-[#252b3d] border-gray-700 text-white mt-1\"
+                        className="bg-[#252b3d] border-gray-700 text-white mt-1"
                       />
                     </div>
                     <div>
-                      <Label className=\"text-gray-300 text-sm\">Nom</Label>
+                      <Label className="text-gray-300 text-sm">Nom</Label>
                       <Input
                         value={registerData.nom}
                         onChange={(e) => setRegisterData({ ...registerData, nom: e.target.value })}
                         required
-                        className=\"bg-[#252b3d] border-gray-700 text-white mt-1\"
+                        className="bg-[#252b3d] border-gray-700 text-white mt-1"
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <Label className=\"text-gray-300 text-sm\">Email</Label>
+                    <Label className="text-gray-300 text-sm">Email</Label>
                     <Input
-                      type=\"email\"
+                      type="email"
                       value={registerData.email}
                       onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
                       required
-                      className=\"bg-[#252b3d] border-gray-700 text-white mt-1\"
+                      className="bg-[#252b3d] border-gray-700 text-white mt-1"
                     />
                   </div>
                   
                   <div>
-                    <Label className=\"text-gray-300 text-sm\">Mot de passe</Label>
+                    <Label className="text-gray-300 text-sm">Mot de passe</Label>
                     <Input
-                      type=\"password\"
+                      type="password"
                       value={registerData.password}
                       onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                       required
-                      className=\"bg-[#252b3d] border-gray-700 text-white mt-1\"
+                      className="bg-[#252b3d] border-gray-700 text-white mt-1"
                     />
                   </div>
 
                   <div>
-                    <Label className=\"text-gray-300 text-sm mb-2 block\">Type de licence</Label>
+                    <Label className="text-gray-300 text-sm mb-2 block">Type de licence</Label>
                     <RadioGroup
                       value={registerData.type_licence}
                       onValueChange={(value) => setRegisterData({ ...registerData, type_licence: value })}
                     >
-                      <div className=\"flex items-center space-x-2 mb-2\">
-                        <RadioGroupItem value=\"competition\" id=\"comp\" />
-                        <Label htmlFor=\"comp\" className=\"text-gray-300 text-sm cursor-pointer\">
-                          Compétition (Entraînements + Jeu libre)
+                      <div className="flex items-center space-x-2 mb-2">
+                        <RadioGroupItem value="competition" id="comp" />
+                        <Label htmlFor="comp" className="text-gray-300 text-sm cursor-pointer">
+                          Compétition
                         </Label>
                       </div>
-                      <div className=\"flex items-center space-x-2\">
-                        <RadioGroupItem value=\"jeu_libre\" id=\"libre\" />
-                        <Label htmlFor=\"libre\" className=\"text-gray-300 text-sm cursor-pointer\">
-                          Jeu Libre (Jeu libre uniquement)
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="jeu_libre" id="libre" />
+                        <Label htmlFor="libre" className="text-gray-300 text-sm cursor-pointer">
+                          Jeu Libre
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
                   <div>
-                    <Label className=\"text-gray-300 text-sm mb-2 block\">Statut</Label>
+                    <Label className="text-gray-300 text-sm mb-2 block">Statut</Label>
                     <RadioGroup
-                      value={registerData.est_licencie ? \"licencie\" : \"non_licencie\"}
-                      onValueChange={(value) => setRegisterData({ ...registerData, est_licencie: value === \"licencie\" })}
+                      value={registerData.est_licencie ? "licencie" : "non_licencie"}
+                      onValueChange={(value) => setRegisterData({ ...registerData, est_licencie: value === "licencie" })}
                     >
-                      <div className=\"flex items-center space-x-2 mb-2\">
-                        <RadioGroupItem value=\"licencie\" id=\"lic\" />
-                        <Label htmlFor=\"lic\" className=\"text-gray-300 text-sm cursor-pointer\">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <RadioGroupItem value="licencie" id="lic" />
+                        <Label htmlFor="lic" className="text-gray-300 text-sm cursor-pointer">
                           Je suis licencié(e)
                         </Label>
                       </div>
-                      <div className=\"flex items-center space-x-2\">
-                        <RadioGroupItem value=\"non_licencie\" id=\"nonlic\" />
-                        <Label htmlFor=\"nonlic\" className=\"text-gray-300 text-sm cursor-pointer\">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="non_licencie" id="nonlic" />
+                        <Label htmlFor="nonlic" className="text-gray-300 text-sm cursor-pointer">
                           Non licencié
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
-                  <Button type=\"submit\" className=\"w-full btn-primary\" disabled={isLoading}>
-                    {isLoading ? 'INSCRIPTION...' : \"S'INSCRIRE\"}
+                  <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
+                    {isLoading ? 'INSCRIPTION...' : "S'INSCRIRE"}
                   </Button>
                 </form>
               </div>
@@ -335,21 +326,18 @@ export default function Login() {
         </Card>
       </div>
 
-      {/* Dialogs */}
       <AlertDialog open={showNonLicencieDialog} onOpenChange={setShowNonLicencieDialog}>
-        <AlertDialogContent className=\"glass-card border-0\">
+        <AlertDialogContent className="glass-card border-0">
           <AlertDialogHeader>
-            <AlertDialogTitle className=\"text-2xl text-[#FF6B35]\">
-              👥 Vous n'êtes pas encore licencié?
+            <AlertDialogTitle className="text-2xl text-[#FF6B35]">
+              Vous n'êtes pas encore licencié?
             </AlertDialogTitle>
-            <AlertDialogDescription className=\"text-gray-300\">
+            <AlertDialogDescription className="text-gray-300">
               Demandez une période d'essai pour vous entraîner!
-              <br /><br />
-              Contactez-nous pour plus d'informations.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction className=\"btn-primary\" onClick={() => setShowNonLicencieDialog(false)}>
+            <AlertDialogAction className="btn-primary" onClick={() => setShowNonLicencieDialog(false)}>
               D'accord
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -357,27 +345,27 @@ export default function Login() {
       </AlertDialog>
 
       <AlertDialog open={showForgotPassword} onOpenChange={setShowForgotPassword}>
-        <AlertDialogContent className=\"glass-card border-0\">
+        <AlertDialogContent className="glass-card border-0">
           <AlertDialogHeader>
-            <AlertDialogTitle className=\"text-xl text-gray-100\">Mot de passe oublié</AlertDialogTitle>
+            <AlertDialogTitle className="text-xl text-gray-100">Mot de passe oublié</AlertDialogTitle>
             <AlertDialogDescription>
-              <div className=\"space-y-4 mt-4\">
-                <p className=\"text-gray-300\">Entrez votre email</p>
+              <div className="space-y-4 mt-4">
+                <p className="text-gray-300">Entrez votre email</p>
                 <Input
-                  type=\"email\"
-                  placeholder=\"votre@email.com\"
+                  type="email"
+                  placeholder="votre@email.com"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className=\"bg-[#252b3d] border-gray-700 text-white\"
+                  className="bg-[#252b3d] border-gray-700 text-white"
                 />
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant=\"outline\" onClick={() => setShowForgotPassword(false)} className=\"border-gray-700 text-gray-300\">
+            <Button variant="outline" onClick={() => setShowForgotPassword(false)} className="border-gray-700 text-gray-300">
               Annuler
             </Button>
-            <Button className=\"btn-primary\" onClick={handleForgotPassword}>
+            <Button className="btn-primary" onClick={handleForgotPassword}>
               Envoyer
             </Button>
           </AlertDialogFooter>
@@ -385,28 +373,28 @@ export default function Login() {
       </AlertDialog>
 
       <AlertDialog open={showReferentVerification} onOpenChange={setShowReferentVerification}>
-        <AlertDialogContent className=\"glass-card border-0\">
+        <AlertDialogContent className="glass-card border-0">
           <AlertDialogHeader>
-            <AlertDialogTitle className=\"text-xl text-gray-100\">Vérification Référent</AlertDialogTitle>
+            <AlertDialogTitle className="text-xl text-gray-100">Vérification Référent</AlertDialogTitle>
             <AlertDialogDescription>
-              <div className=\"space-y-4 mt-4\">
-                <p className=\"text-gray-300\">Code de vérification (6 chiffres)</p>
+              <div className="space-y-4 mt-4">
+                <p className="text-gray-300">Code de vérification</p>
                 <Input
-                  type=\"text\"
-                  placeholder=\"000000\"
+                  type="text"
+                  placeholder="000000"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
                   maxLength={6}
-                  className=\"bg-[#252b3d] border-gray-700 text-white text-center text-2xl tracking-widest\"
+                  className="bg-[#252b3d] border-gray-700 text-white text-center text-2xl tracking-widest"
                 />
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <Button variant=\"outline\" onClick={() => setShowReferentVerification(false)} className=\"border-gray-700 text-gray-300\">
+            <Button variant="outline" onClick={() => setShowReferentVerification(false)} className="border-gray-700 text-gray-300">
               Annuler
             </Button>
-            <Button className=\"btn-primary\" onClick={handleVerifyReferent}>
+            <Button className="btn-primary" onClick={handleVerifyReferent}>
               Vérifier
             </Button>
           </AlertDialogFooter>
