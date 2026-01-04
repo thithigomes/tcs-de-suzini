@@ -30,22 +30,20 @@ export default function Navbar() {
             <span className="font-anton text-2xl text-white tracking-wider">TCS SUZINI</span>
           </Link>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive = location.pathname === item.path;
               return (
                 <Link key={item.path} to={item.path}>
-                  <Button
-                    variant="ghost"
-                    className={`text-gray-300 hover:bg-white/10 transition-colors ${
-                      isActive ? 'bg-white/10 text-white' : ''
+                  <div
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all cursor-pointer ${
+                      isActive ? `${item.color} text-white shadow-lg` : 'bg-white/5 text-gray-300 hover:bg-white/10'
                     }`}
                     data-testid={`nav-link-${item.path}`}
                   >
-                    <span className="mr-2">{item.emoji}</span>
-                    {item.name}
-                  </Button>
+                    <span className="text-lg">{item.emoji}</span>
+                    <span className="font-medium">{item.name}</span>
+                  </div>
                 </Link>
               );
             })}
