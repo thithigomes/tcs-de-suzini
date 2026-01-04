@@ -25,7 +25,6 @@ export default function Navbar() {
               alt="TCS Suzini Logo" 
               className="w-12 h-12 rounded-full shadow-lg"
             />
-            <span className="font-anton text-2xl text-white tracking-wider">TCS SUZINI</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-2">
