@@ -6,16 +6,16 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Checkbox } from '../components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../components/ui/alert-dialog';
 import { toast } from 'sonner';
-import VolleyballFloating from '../components/VolleyballFloating';
+import VolleyballEmojis from '../components/VolleyballEmojis';
 
 export default function Login() {
   const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(true);
   const [showNonLicencieDialog, setShowNonLicencieDialog] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showReferentVerification, setShowReferentVerification] = useState(false);
@@ -135,7 +135,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden" 
          style={{ background: '#1a1f2e' }}>
-      <VolleyballFloating />
+      <VolleyballEmojis />
       <div className="grain-texture absolute inset-0"></div>
       
       <div className="relative z-10 w-full max-w-md mx-4">
@@ -145,7 +145,7 @@ export default function Login() {
               <img 
                 src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
                 alt="TCS Suzini Logo" 
-                className="w-16 h-16 mx-auto mb-4 rounded-full"
+                className="w-20 h-20 mx-auto mb-4 rounded-full shadow-lg"
               />
               <h1 className="font-anton text-4xl text-[#FF6B35] mb-2" style={{ letterSpacing: '0.05em' }}>
                 TCS de Suzini
@@ -153,83 +153,73 @@ export default function Login() {
               <p className="text-sm text-gray-400">Beach Volley</p>
             </div>
 
-            {isLoginMode ? (
-              <form onSubmit={handleLogin} className="space-y-4" data-testid="login-form">
-                <div>
-                  <Label htmlFor="email" className="text-gray-300">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                    required
-                    className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={loginData.password}
-                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                    required
-                    className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
-                  />
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="remember" 
-                    checked={rememberMe}
-                    onCheckedChange={setRememberMe}
-                  />
-                  <label htmlFor="remember" className="text-sm text-gray-400 cursor-pointer">
-                    Se souvenir de moi
-                  </label>
-                </div>
+            <Tabs defaultValue="login" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-[#252b3d] mb-6">
+                <TabsTrigger value="login" className="data-[state=active]:bg-[#FF6B35] data-[state=active]:text-white">
+                  Connexion
+                </TabsTrigger>
+                <TabsTrigger value="register" className="data-[state=active]:bg-[#FF6B35] data-[state=active]:text-white">
+                  Inscription
+                </TabsTrigger>
+                <TabsTrigger value="referent" className="data-[state=active]:bg-[#10B981] data-[state=active]:text-white">
+                  Référent
+                </TabsTrigger>
+              </TabsList>
 
-                <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
-                  {isLoading ? 'CONNEXION...' : 'SE CONNECTER'}
-                </Button>
+              <TabsContent value="login">
+                <form onSubmit={handleLogin} className="space-y-4" data-testid="login-form">
+                  <div>
+                    <Label htmlFor="email" className="text-gray-300">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="votre@email.com"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      required
+                      className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="password" className="text-gray-300">Mot de passe</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={loginData.password}
+                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                      required
+                      className="bg-[#252b3d] border-gray-700 text-white placeholder:text-gray-500 mt-1"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="remember" 
+                        checked={rememberMe}
+                        onCheckedChange={setRememberMe}
+                      />
+                      <label htmlFor="remember" className="text-sm text-gray-400 cursor-pointer">
+                        Se souvenir
+                      </label>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      className="text-sm text-gray-400 hover:text-[#FF6B35] transition-colors"
+                    >
+                      Mot de passe oublié?
+                    </button>
+                  </div>
 
-                <div className="flex justify-between text-sm mt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowForgotPassword(true)}
-                    className="text-gray-400 hover:text-[#FF6B35] transition-colors"
-                  >
-                    Mot de passe oublié?
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsLoginMode(false)}
-                    className="text-gray-400 hover:text-[#10B981] transition-colors"
-                  >
-                    Créer un compte
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex gap-2 mb-4">
-                  <Button 
-                    onClick={() => setIsLoginMode(true)} 
-                    variant="outline" 
-                    className="flex-1 bg-transparent border-gray-700 text-gray-400 hover:text-white"
-                  >
-                    Connexion
+                  <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
+                    {isLoading ? 'CONNEXION...' : 'SE CONNECTER'}
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 bg-[#252b3d] border-[#FF6B35] text-[#FF6B35]"
-                  >
-                    Inscription
-                  </Button>
-                </div>
+                </form>
+              </TabsContent>
 
+              <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -320,8 +310,84 @@ export default function Login() {
                     {isLoading ? 'INSCRIPTION...' : "S'INSCRIRE"}
                   </Button>
                 </form>
-              </div>
-            )}
+              </TabsContent>
+
+              <TabsContent value="referent">
+                <form onSubmit={handleReferentRegister} className="space-y-4">
+                  <div className="p-3 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg mb-4">
+                    <p className="text-sm text-[#10B981] text-center font-medium">
+                      🔐 Espace réservé aux référents
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-gray-300 text-sm">Prénom</Label>
+                      <Input
+                        value={referentData.prenom}
+                        onChange={(e) => setReferentData({ ...referentData, prenom: e.target.value })}
+                        required
+                        className="bg-[#252b3d] border-gray-700 text-white mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-gray-300 text-sm">Nom</Label>
+                      <Input
+                        value={referentData.nom}
+                        onChange={(e) => setReferentData({ ...referentData, nom: e.target.value })}
+                        required
+                        className="bg-[#252b3d] border-gray-700 text-white mt-1"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-gray-300 text-sm">Email</Label>
+                    <Input
+                      type="email"
+                      value={referentData.email}
+                      onChange={(e) => setReferentData({ ...referentData, email: e.target.value })}
+                      required
+                      className="bg-[#252b3d] border-gray-700 text-white mt-1"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label className="text-gray-300 text-sm">Mot de passe</Label>
+                    <Input
+                      type="password"
+                      value={referentData.password}
+                      onChange={(e) => setReferentData({ ...referentData, password: e.target.value })}
+                      required
+                      className="bg-[#252b3d] border-gray-700 text-white mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label className="text-gray-300 text-sm">Code Secret</Label>
+                    <div className="relative mt-1">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-mono text-sm z-10">
+                        TCS-REF-
+                      </span>
+                      <Input
+                        type="password"
+                        placeholder="****"
+                        value={referentData.code_secret}
+                        onChange={(e) => setReferentData({ ...referentData, code_secret: e.target.value })}
+                        required
+                        maxLength={4}
+                        className="bg-[#252b3d] border-gray-700 text-white pl-24"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Année en cours (ex: TCS-REF-****)</p>
+                  </div>
+
+                  <Button type="submit" className="w-full btn-secondary" disabled={isLoading}>
+                    {isLoading ? 'CRÉATION...' : 'CRÉER COMPTE RÉFÉRENT'}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>
@@ -330,7 +396,7 @@ export default function Login() {
         <AlertDialogContent className="glass-card border-0">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-2xl text-[#FF6B35]">
-              Vous n'êtes pas encore licencié?
+              👥 Vous n'êtes pas encore licencié?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-gray-300">
               Demandez une période d'essai pour vous entraîner!
@@ -378,7 +444,7 @@ export default function Login() {
             <AlertDialogTitle className="text-xl text-gray-100">Vérification Référent</AlertDialogTitle>
             <AlertDialogDescription>
               <div className="space-y-4 mt-4">
-                <p className="text-gray-300">Code de vérification</p>
+                <p className="text-gray-300">Code de vérification (6 chiffres)</p>
                 <Input
                   type="text"
                   placeholder="000000"
@@ -394,7 +460,7 @@ export default function Login() {
             <Button variant="outline" onClick={() => setShowReferentVerification(false)} className="border-gray-700 text-gray-300">
               Annuler
             </Button>
-            <Button className="btn-primary" onClick={handleVerifyReferent}>
+            <Button className="btn-secondary" onClick={handleVerifyReferent}>
               Vérifier
             </Button>
           </AlertDialogFooter>
