@@ -1,8 +1,5 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "frontend/build",
-  "framework": "create-react-app",
-  "env": {
-    "REACT_APP_BACKEND_URL": "@BACKEND_URL"
-  }
+  "framework": "create-react-app"
 }
