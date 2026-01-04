@@ -9,12 +9,12 @@ export default function Navbar() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Tableau de bord', path: '/', icon: Home },
-    { name: 'Tournois', path: '/tournaments', icon: Trophy },
-    { name: 'Matchs', path: '/matches', icon: Calendar },
-    { name: 'Classement', path: '/rankings', icon: TrendingUp },
-    { name: 'Entraînements', path: '/training', icon: Dumbbell },
-    { name: 'Actualités', path: '/news', icon: Newspaper },
+    { name: 'Tableau de bord', path: '/', icon: Home, emoji: '🏠' },
+    { name: 'Tournois', path: '/tournaments', icon: Trophy, emoji: '🏆' },
+    { name: 'Matchs', path: '/matches', icon: Calendar, emoji: '⚽' },
+    { name: 'Classement', path: '/rankings', icon: TrendingUp, emoji: '📊' },
+    { name: 'Entraînements', path: '/training', icon: Dumbbell, emoji: '💪' },
+    { name: 'Actualités', path: '/news', icon: Newspaper, emoji: '📰' },
   ];
 
   return (
