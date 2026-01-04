@@ -50,6 +50,18 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-3">
+            {user?.role === 'referent' && (
+              <Link to="/referent">
+                <Button
+                  variant="ghost"
+                  className="text-white hover:bg-white/20"
+                  data-testid="nav-referent-link"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  R\u00e9f\u00e9rent
+                </Button>
+              </Link>
+            )}
             {user?.role === 'admin' && (
               <Link to="/admin">
                 <Button
