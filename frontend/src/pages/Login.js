@@ -377,17 +377,21 @@ export default function Login() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="code-secret">Code Secret (Année en cours)</Label>
-                    <Input
-                      id="code-secret"
-                      data-testid="referent-code-input"
-                      type="text"
-                      placeholder="2026"
-                      value={referentData.code_secret}
-                      onChange={(e) => setReferentData({ ...referentData, code_secret: e.target.value })}
-                      required
-                      maxLength={4}
-                    />
+                    <Label htmlFor="code-secret">Code Secret</Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-mono">TCS-REF-</span>
+                      <Input
+                        id="code-secret"
+                        data-testid="referent-code-input"
+                        type="text"
+                        placeholder="2026"
+                        value={referentData.code_secret}
+                        onChange={(e) => setReferentData({ ...referentData, code_secret: e.target.value })}
+                        required
+                        maxLength={4}
+                        className="pl-24"
+                      />
+                    </div>
                     <p className="text-xs text-gray-400 mt-1">Entrez l'année en cours (ex: 2026)</p>
                   </div>
                   <Button type="submit" className="w-full btn-primary" disabled={isLoading} data-testid="referent-submit-button">
