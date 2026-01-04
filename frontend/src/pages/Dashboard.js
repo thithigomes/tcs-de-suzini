@@ -3,6 +3,8 @@ import { AuthContext } from '../App';
 import { API } from '../App';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import FloatingBalls from '../components/FloatingBalls';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Trophy, Calendar, TrendingUp, Award, Users, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
