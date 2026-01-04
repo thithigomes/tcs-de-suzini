@@ -52,7 +52,7 @@ export default function Dashboard() {
 
   const menuItems = [
     { name: 'Tournois', emoji: '🏆', description: 'Inscrivez-vous aux compétitions', link: '/tournaments', color: 'bg-[#FF6B35]' },
-    { name: 'Matchs', emoji: '⚽', description: 'Calendrier des rencontres', link: '/matches', color: 'bg-[#10B981]' },
+    { name: 'Matchs', emoji: '🏐', description: 'Calendrier des rencontres', link: '/matches', color: 'bg-[#10B981]' },
     { name: 'Classement', emoji: '📊', description: 'Voir le ranking', link: '/rankings', color: 'bg-[#84CC16]' },
     { name: 'Entraînements', emoji: '💪', description: 'Horaires et sessions', link: '/training', color: 'bg-[#8B5CF6]' },
     { name: 'Actualités', emoji: '📰', description: 'Nouvelles du club', link: '/news', color: 'bg-[#F59E0B]' },
@@ -65,11 +65,17 @@ export default function Dashboard() {
       <div className="grain-texture absolute inset-0"></div>
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 flex-1">
-        <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-anton uppercase text-white tracking-wider">
-            Bienvenue, {user?.prenom}! 🏐
+        <div className="mb-8 text-center">
+          <img 
+            src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
+            alt="TCS Suzini Logo" 
+            className="w-24 h-24 mx-auto mb-4 rounded-full shadow-lg"
+          />
+          <h1 className="text-4xl md:text-5xl font-anton uppercase text-[#FF6B35] tracking-wider">
+            TCS de Suzini
           </h1>
-          <p className="text-lg text-gray-400 mt-2">Tableau de bord - TCS de Suzini</p>
+          <p className="text-xl text-[#10B981] mt-2 font-bold">Beach Volley</p>
+          <p className="text-lg text-gray-400 mt-4">Bienvenue, {user?.prenom}! 🏐</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
