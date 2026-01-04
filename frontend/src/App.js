@@ -12,6 +12,8 @@ import Training from "./pages/Training";
 import News from "./pages/News";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import Referent from "./pages/Referent";
+import ResetPassword from "./pages/ResetPassword";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
