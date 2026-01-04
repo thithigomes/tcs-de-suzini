@@ -1,0 +1,60 @@
+🚀 DEPLOY EM 3 CLIQUES - TCS DE SUZINI
+
+============================================
+PASSO 1: VERCEL (FRONTEND)
+============================================
+
+1. Abra: https://vercel.com/new
+2. Clique "Continue with GitHub"
+3. Selecione: thithigomes/tcs-voleyball
+4. Clique "Import"
+5. Settings:
+   - Framework: Other (ou deixa detectar)
+   - Root Directory: ./frontend
+   - Build Command: npm run build
+   - Output Directory: build
+6. Clique "Deploy" 🚀
+
+Seu site ficará em: https://tcs-voleyball.vercel.app (ou semelhante)
+
+============================================
+PASSO 2: RAILWAY (BACKEND)
+============================================
+
+1. Abra: https://railway.app/new
+2. Clique "Deploy from GitHub repo"
+3. Selecione: thithigomes/tcs-voleyball
+4. Clique "Deploy"
+5. Após deploy (5-10 min), vá em "Settings"
+6. Adicione estas variáveis de ambiente:
+   
+   MONGODB_URL=mongodb://localhost:27017/tcs_db
+   SMTP_EMAIL=thiago.gomes97300@gmail.com
+   SMTP_PASSWORD=ghqdlqybvcxcchnb
+   SECRET_KEY=sua-chave-secreta-super-secreta
+   FRONTEND_URL=https://tcs-voleyball.vercel.app
+
+7. Clique "Deploy" novamente
+
+Seu API ficará em: https://tcs-voleyball-prod.railway.app (ou semelhante)
+
+============================================
+PASSO 3: CONECTAR OS DOIS
+============================================
+
+1. Após Railway dar a URL do backend, copie ela
+2. Volte no Vercel: Settings → Environment Variables
+3. Adicione:
+   REACT_APP_BACKEND_URL=https://tcs-voleyball-prod.railway.app
+4. Clique "Redeploy" 🚀
+
+FIM! ✅
+
+============================================
+DÚVIDAS?
+============================================
+
+• Vercel: Clique "Deployments" para ver logs
+• Railway: Clique "Logs" para ver erros
+• GitHub: Qualquer push atualiza automaticamente!
+
