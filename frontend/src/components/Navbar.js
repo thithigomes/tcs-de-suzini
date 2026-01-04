@@ -43,7 +43,7 @@ export default function Navbar() {
                     }`}
                     data-testid={`nav-link-${item.path}`}
                   >
-                    <Icon className="w-4 h-4 mr-2" />
+                    <span className="mr-2">{item.emoji}</span>
                     {item.name}
                   </Button>
                 </Link>
