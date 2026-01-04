@@ -48,6 +48,17 @@ class UserRegister(BaseModel):
     type_licence: str
     est_licencie: bool
 
+class ReferentRegister(BaseModel):
+    email: EmailStr
+    password: str
+    nom: str
+    prenom: str
+    code_secret: str
+
+class ReferentVerify(BaseModel):
+    email: EmailStr
+    code_verification: str
+
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
