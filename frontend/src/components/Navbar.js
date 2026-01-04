@@ -9,12 +9,12 @@ export default function Navbar() {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Tableau de bord', path: '/', icon: Home, emoji: '🏠' },
-    { name: 'Tournois', path: '/tournaments', icon: Trophy, emoji: '🏆' },
-    { name: 'Matchs', path: '/matches', icon: Calendar, emoji: '⚽' },
-    { name: 'Classement', path: '/rankings', icon: TrendingUp, emoji: '📊' },
-    { name: 'Entraînements', path: '/training', icon: Dumbbell, emoji: '💪' },
-    { name: 'Actualités', path: '/news', icon: Newspaper, emoji: '📰' },
+    { name: 'Tableau de bord', path: '/', emoji: '🏠', color: 'bg-[#06B6D4]' },
+    { name: 'Tournois', path: '/tournaments', emoji: '🏆', color: 'bg-[#FF6B35]' },
+    { name: 'Matchs', path: '/matches', emoji: '🏐', color: 'bg-[#10B981]' },
+    { name: 'Classement', path: '/rankings', emoji: '📊', color: 'bg-[#8B5CF6]' },
+    { name: 'Entraînements', path: '/training', emoji: '💪', color: 'bg-[#F59E0B]' },
+    { name: 'Actualités', path: '/news', emoji: '📰', color: 'bg-[#84CC16]' },
   ];
 
   return (
