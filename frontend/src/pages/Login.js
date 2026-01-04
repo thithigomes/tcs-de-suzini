@@ -372,17 +372,18 @@ export default function Login() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="code-secret">Code Secret</Label>
+                    <Label htmlFor="code-secret">Code Secret (Année en cours)</Label>
                     <Input
                       id="code-secret"
                       data-testid="referent-code-input"
-                      type="password"
-                      placeholder="TCS-REF-XXXX"
+                      type="text"
+                      placeholder="2026"
                       value={referentData.code_secret}
                       onChange={(e) => setReferentData({ ...referentData, code_secret: e.target.value })}
                       required
+                      maxLength={4}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Code fourni par l'administration du club</p>
+                    <p className="text-xs text-gray-400 mt-1">Entrez l'année en cours (ex: 2026)</p>
                   </div>
                   <Button type="submit" className="w-full btn-primary" disabled={isLoading} data-testid="referent-submit-button">
                     {isLoading ? 'Envoi...' : 'Créer compte Référent'}
