@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "@/App.css";
+import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "./components/ui/sonner";
@@ -15,7 +15,7 @@ import Admin from "./pages/Admin";
 import Referent from "./pages/Referent";
 import ResetPassword from "./pages/ResetPassword";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
 export const API = `${BACKEND_URL}/api`;
 
 export const AuthContext = React.createContext();
