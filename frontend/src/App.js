@@ -90,6 +90,7 @@ function App() {
           <Route path="/admin" element={token && user?.role === 'admin' ? <Admin /> : <Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </AuthContext.Provider>
   );
 }
