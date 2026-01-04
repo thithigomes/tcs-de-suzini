@@ -468,7 +468,7 @@ async def get_tournaments():
     return tournaments
 
 @api_router.post("/tournaments", response_model=Tournament)
-async def create_tournament(tournament_data: TournamentCreate, current_user: dict = Depends(get_current_admin)):
+async def create_tournament(tournament_data: TournamentCreate, current_user: dict = Depends(get_current_referent)):
     import uuid
     tournament_id = str(uuid.uuid4())
     
@@ -480,11 +480,34 @@ async def create_tournament(tournament_data: TournamentCreate, current_user: dic
         "date_fin": tournament_data.date_fin,
         "statut": "à_venir",
         "participants": [],
-        "max_participants": tournament_data.max_participants
+        "max_participants": tournament_data.max_participants,
+        "est_payant": tournament_data.est_payant,
+        "prix": tournament_data.prix if tournament_data.est_payant else 0.0
     }
     
     await db.tournaments.insert_one(tournament_doc)
     return Tournament(**tournament_doc)
+
+@api_router.patch("/tournaments/{tournament_id}")
+async def update_tournament(tournament_id: str, tournament_data: TournamentCreate, current_user: dict = Depends(get_current_referent)):
+    result = await db.tournaments.update_one(
+        {"id": tournament_id},
+        {"$set": {
+            "nom": tournament_data.nom,
+            "description": tournament_data.description,
+            "date_debut": tournament_data.date_debut,
+            "date_fin": tournament_data.date_fin,
+            "max_participants": tournament_data.max_participants,
+            "est_payant": tournament_data.est_payant,
+            "prix": tournament_data.prix if tournament_data.est_payant else 0.0
+        }}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Tournoi non trouvé")
+    
+    tournament = await db.tournaments.find_one({"id": tournament_id}, {"_id": 0})
+    return Tournament(**tournament)
 
 @api_router.post("/tournaments/{tournament_id}/register")
 async def register_tournament(tournament_id: str, current_user: dict = Depends(get_current_user)):
