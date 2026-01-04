@@ -270,6 +270,95 @@ async def register(user_data: UserRegister):
     token = create_access_token({"sub": user_id})
     return {"token": token, "user": User(**{k: v for k, v in user_doc.items() if k != "password_hash"})}
 
+@api_router.post("/auth/register-referent")
+async def register_referent(referent_data: ReferentRegister):
+    if referent_data.code_secret != REFERENT_SECRET_CODE:
+        raise HTTPException(status_code=403, detail="Code secret invalide")
+    
+    existing = await db.users.find_one({"email": referent_data.email}, {"_id": 0})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email déjà utilisé")
+    
+    verification_code = generate_verification_code()
+    
+    await db.pending_referents.delete_many({"email": referent_data.email})
+    
+    import uuid
+    pending_id = str(uuid.uuid4())
+    hashed_password = pwd_context.hash(referent_data.password)
+    
+    pending_doc = {
+        "id": pending_id,
+        "email": referent_data.email,
+        "password_hash": hashed_password,
+        "nom": referent_data.nom,
+        "prenom": referent_data.prenom,
+        "verification_code": verification_code,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+    }
+    
+    await db.pending_referents.insert_one(pending_doc)
+    
+    await send_email_async(
+        referent_data.email,
+        "Code de vérification - Référent TCS Suzini",
+        f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #064E3B 0%, #FF6B35 100%);">
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <h1 style="color: #FF6B35; text-align: center; font-size: 32px; margin-bottom: 20px;">🏐 TCS de Suzini</h1>
+                <h2 style="color: #064E3B; text-align: center;">Vérification Référent</h2>
+                <p style="font-size: 16px; color: #333;">Bonjour {referent_data.prenom},</p>
+                <p style="font-size: 16px; color: #333;">Votre code de vérification pour créer un compte référent:</p>
+                <div style="background: linear-gradient(90deg, #FF6B35, #84CC16); padding: 20px; border-radius: 10px; text-align: center; margin: 30px 0;">
+                    <p style="font-size: 48px; font-weight: bold; color: white; letter-spacing: 10px; margin: 0;">{verification_code}</p>
+                </div>
+                <p style="font-size: 14px; color: #666; text-align: center;">Ce code expire dans 1 heure</p>
+                <p style="font-size: 14px; color: #999; text-align: center; margin-top: 30px;">Si vous n'avez pas demandé ce code, ignorez cet email.</p>
+            </div>
+        </div>
+        """
+    )
+    
+    return {"message": "Code de vérification envoyé à votre email"}
+
+@api_router.post("/auth/verify-referent")
+async def verify_referent(verify_data: ReferentVerify):
+    pending = await db.pending_referents.find_one({"email": verify_data.email}, {"_id": 0})
+    if not pending:
+        raise HTTPException(status_code=404, detail="Demande de vérification non trouvée")
+    
+    if pending["verification_code"] != verify_data.code_verification:
+        raise HTTPException(status_code=400, detail="Code de vérification invalide")
+    
+    expires_at = datetime.fromisoformat(pending["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        await db.pending_referents.delete_one({"email": verify_data.email})
+        raise HTTPException(status_code=400, detail="Code de vérification expiré")
+    
+    import uuid
+    user_id = str(uuid.uuid4())
+    
+    user_doc = {
+        "id": user_id,
+        "email": pending["email"],
+        "password_hash": pending["password_hash"],
+        "nom": pending["nom"],
+        "prenom": pending["prenom"],
+        "type_licence": "competition",
+        "est_licencie": True,
+        "role": "referent",
+        "points": 0,
+        "participations": 0,
+        "date_creation": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.insert_one(user_doc)
+    await db.pending_referents.delete_one({"email": verify_data.email})
+    
+    token = create_access_token({"sub": user_id})
+    return {"token": token, "user": User(**{k: v for k, v in user_doc.items() if k != "password_hash"})}
+
 @api_router.post("/auth/login")
 async def login(credentials: UserLogin):
     user = await db.users.find_one({"email": credentials.email}, {"_id": 0})
