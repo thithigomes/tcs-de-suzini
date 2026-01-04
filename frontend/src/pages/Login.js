@@ -52,6 +52,7 @@ export default function Login() {
       const response = await axios.post(`${API}/auth/login`, loginData);
       login(response.data.token, response.data.user);
       toast.success('Connexion réussie!');
+      setTimeout(() => navigate('/'), 100);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Erreur de connexion');
     } finally {
@@ -87,6 +88,7 @@ export default function Login() {
       const response = await axios.post(`${API}/auth/register`, registerData);
       login(response.data.token, response.data.user);
       toast.success('Inscription réussie!');
+      setTimeout(() => navigate('/'), 100);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Erreur d'inscription");
     } finally {
@@ -127,6 +129,7 @@ export default function Login() {
       login(response.data.token, response.data.user);
       toast.success('Compte référent créé avec succès!');
       setShowReferentVerification(false);
+      setTimeout(() => navigate('/'), 100);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Code invalide');
     } finally {
