@@ -15,7 +15,12 @@ import Admin from "./pages/Admin";
 import Referent from "./pages/Referent";
 import ResetPassword from "./pages/ResetPassword";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+// IMPORTANT: Set REACT_APP_BACKEND_URL environment variable in Vercel dashboard
+// Example: https://your-backend-url.railway.app or https://your-backend-url.onrender.com
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+if (!BACKEND_URL) {
+  console.warn("⚠️  REACT_APP_BACKEND_URL is not configured. Please set it in your environment variables.");
+}
 export const API = `${BACKEND_URL}/api`;
 
 export const AuthContext = React.createContext();
