@@ -80,6 +80,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={!token ? <Login /> : <Navigate to="/" />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={token ? <Dashboard /> : <Navigate to="/login" />} />
           <Route path="/tournaments" element={token ? <Tournaments /> : <Navigate to="/login" />} />
           <Route path="/matches" element={token ? <Matches /> : <Navigate to="/login" />} />
@@ -88,6 +89,7 @@ function App() {
           <Route path="/news" element={token ? <News /> : <Navigate to="/login" />} />
           <Route path="/profile" element={token ? <Profile /> : <Navigate to="/login" />} />
           <Route path="/admin" element={token && user?.role === 'admin' ? <Admin /> : <Navigate to="/" />} />
+          <Route path="/referent" element={token && user?.role === 'referent' ? <Referent /> : <Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
