@@ -59,7 +59,7 @@ export default function Navbar() {
                   className="text-gray-300 hover:bg-white/10"
                   data-testid="nav-referent-link"
                 >
-                  <Shield className="w-4 h-4 mr-2" />
+                  <span className="mr-2">🔐</span>
                   R\u00e9f\u00e9rent
                 </Button>
               </Link>
@@ -71,7 +71,7 @@ export default function Navbar() {
                   className="text-gray-300 hover:bg-white/10"
                   data-testid="nav-admin-link"
                 >
-                  <Shield className="w-4 h-4 mr-2" />
+                  <span className="mr-2">⚙️</span>
                   Admin
                 </Button>
               </Link>
@@ -82,7 +82,7 @@ export default function Navbar() {
                 className="text-gray-300 hover:bg-white/10"
                 data-testid="nav-profile-link"
               >
-                <User className="w-4 h-4 mr-2" />
+                <span className="mr-2">👤</span>
                 Profil
               </Button>
             </Link>
@@ -92,7 +92,7 @@ export default function Navbar() {
               className="text-gray-300 hover:bg-white/10"
               data-testid="nav-logout-button"
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <span className="mr-2">🚪</span>
               Déconnexion
             </Button>
           </div>
