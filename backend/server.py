@@ -11,6 +11,8 @@ from typing import List, Optional
 from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 import jwt
+import asyncio
+import resend
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -29,12 +31,21 @@ SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'votre-cle-secrete-super-securisee
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 43200
 
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+ADMIN_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', 'thiago.gomes97300@gmail.com')
+
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
+
+logger = logging.getLogger(__name__)
+
 class UserRegister(BaseModel):
     email: EmailStr
     password: str
     nom: str
     prenom: str
-    type_licence: str  # "competition" ou "jeu_libre"
+    type_licence: str
     est_licencie: bool
 
 class UserLogin(BaseModel):
@@ -139,6 +150,31 @@ class TrainingSchedule(BaseModel):
     licence_requise: str
     description: str
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+async def send_email_async(to_email: str, subject: str, html_content: str):
+    if not RESEND_API_KEY or RESEND_API_KEY == 're_123456789':
+        logger.warning(f"Email not sent (no API key): {subject} to {to_email}")
+        return
+    
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [to_email],
+        "subject": subject,
+        "html": html_content
+    }
+    
+    try:
+        await asyncio.to_thread(resend.Emails.send, params)
+        logger.info(f"Email sent: {subject} to {to_email}")
+    except Exception as e:
+        logger.error(f"Failed to send email: {str(e)}")
+
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -163,8 +199,13 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail="Token invalide")
 
 async def get_current_admin(current_user: dict = Depends(get_current_user)):
-    if current_user.get("role") != "admin":
+    if current_user.get("role") not in ["admin", "referent"]:
         raise HTTPException(status_code=403, detail="Accès non autorisé")
+    return current_user
+
+async def get_current_referent(current_user: dict = Depends(get_current_user)):
+    if current_user.get("role") != "referent":
+        raise HTTPException(status_code=403, detail="Accès réservé aux référents")
     return current_user
 
 @api_router.post("/auth/register")
@@ -193,6 +234,19 @@ async def register(user_data: UserRegister):
     
     await db.users.insert_one(user_doc)
     
+    asyncio.create_task(send_email_async(
+        ADMIN_EMAIL,
+        f"Nouveau membre: {user_data.prenom} {user_data.nom}",
+        f"""
+        <h2>Nouvelle inscription au club TCS de Suzini</h2>
+        <p><strong>Nom:</strong> {user_data.prenom} {user_data.nom}</p>
+        <p><strong>Email:</strong> {user_data.email}</p>
+        <p><strong>Type de licence:</strong> {user_data.type_licence}</p>
+        <p><strong>Licencié:</strong> {'Oui' if user_data.est_licencie else 'Non'}</p>
+        <p><strong>Date d'inscription:</strong> {datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M')}</p>
+        """
+    ))
+    
     token = create_access_token({"sub": user_id})
     return {"token": token, "user": User(**{k: v for k, v in user_doc.items() if k != "password_hash"})}
 
@@ -204,6 +258,50 @@ async def login(credentials: UserLogin):
     
     token = create_access_token({"sub": user["id"]})
     return {"token": token, "user": User(**{k: v for k, v in user.items() if k != "password_hash"})}
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: ForgotPasswordRequest):
+    user = await db.users.find_one({"email": request.email}, {"_id": 0})
+    if not user:
+        return {"message": "Si l'email existe, un lien de réinitialisation a été envoyé"}
+    
+    reset_token = create_access_token({"sub": user["id"], "type": "reset"})
+    
+    reset_link = f"https://tcsvolley.preview.emergentagent.com/reset-password?token={reset_token}"
+    
+    await send_email_async(
+        request.email,
+        "Réinitialisation de votre mot de passe - TCS Suzini",
+        f"""
+        <h2>Réinitialisation de mot de passe</h2>
+        <p>Bonjour {user['prenom']},</p>
+        <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
+        <p>Cliquez sur le lien ci-dessous pour créer un nouveau mot de passe:</p>
+        <p><a href="{reset_link}" style="background: #FF6B35; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; display: inline-block;">Réinitialiser mon mot de passe</a></p>
+        <p>Ce lien expirera dans 30 jours.</p>
+        <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
+        """
+    )
+    
+    return {"message": "Si l'email existe, un lien de réinitialisation a été envoyé"}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: ResetPasswordRequest):
+    try:
+        payload = jwt.decode(request.token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "reset":
+            raise HTTPException(status_code=400, detail="Token invalide")
+        user_id = payload.get("sub")
+    except jwt.JWTError:
+        raise HTTPException(status_code=400, detail="Token invalide ou expiré")
+    
+    hashed_password = pwd_context.hash(request.new_password)
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"password_hash": hashed_password}}
+    )
+    
+    return {"message": "Mot de passe réinitialisé avec succès"}
 
 @api_router.get("/users/me", response_model=UserProfile)
 async def get_my_profile(current_user: dict = Depends(get_current_user)):
@@ -223,6 +321,32 @@ async def get_my_profile(current_user: dict = Depends(get_current_user)):
     
     profile = UserProfile(**current_user, achievements=achievement_details)
     return profile
+
+@api_router.get("/referent/users", response_model=List[User])
+async def get_all_users(current_user: dict = Depends(get_current_referent)):
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    return [User(**user) for user in users]
+
+@api_router.delete("/referent/users/{user_id}")
+async def delete_user(user_id: str, current_user: dict = Depends(get_current_referent)):
+    result = await db.users.delete_one({"id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    return {"message": "Utilisateur supprimé"}
+
+@api_router.patch("/referent/users/{user_id}/toggle-license")
+async def toggle_user_license(user_id: str, current_user: dict = Depends(get_current_referent)):
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    new_status = not user.get("est_licencie", False)
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"est_licencie": new_status}}
+    )
+    
+    return {"message": f"Statut de licence modifié", "est_licencie": new_status}
 
 @api_router.get("/achievements", response_model=List[Achievement])
 async def get_achievements():
@@ -279,6 +403,18 @@ async def register_tournament(tournament_id: str, current_user: dict = Depends(g
     )
     
     await check_and_award_achievements(current_user["id"])
+    
+    asyncio.create_task(send_email_async(
+        ADMIN_EMAIL,
+        f"Inscription tournoi: {current_user['prenom']} {current_user['nom']}",
+        f"""
+        <h2>Nouvelle inscription à un tournoi</h2>
+        <p><strong>Joueur:</strong> {current_user['prenom']} {current_user['nom']}</p>
+        <p><strong>Email:</strong> {current_user['email']}</p>
+        <p><strong>Tournoi:</strong> {tournament['nom']}</p>
+        <p><strong>Date:</strong> {datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M')}</p>
+        """
+    ))
     
     return {"message": "Inscription réussie"}
 
@@ -468,6 +604,25 @@ async def seed_data():
         ]
         await db.training_schedule.insert_many(schedules)
     
+    referent_exists = await db.users.find_one({"role": "referent"})
+    if not referent_exists:
+        import uuid
+        referent_id = str(uuid.uuid4())
+        referent_doc = {
+            "id": referent_id,
+            "email": "referent@tcssuzini.fr",
+            "password_hash": pwd_context.hash("referent123"),
+            "nom": "Référent",
+            "prenom": "Directeur",
+            "type_licence": "competition",
+            "est_licencie": True,
+            "role": "referent",
+            "points": 0,
+            "participations": 0,
+            "date_creation": datetime.now(timezone.utc).isoformat()
+        }
+        await db.users.insert_one(referent_doc)
+    
     admin_exists = await db.users.find_one({"role": "admin"})
     if not admin_exists:
         import uuid
@@ -503,7 +658,6 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
