@@ -436,8 +436,33 @@ async def get_all_users(current_user: dict = Depends(get_current_referent)):
     users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
     return [User(**user) for user in users]
 
+@api_router.patch("/referent/users/{user_id}")
+async def update_user(user_id: str, user_data: dict, current_user: dict = Depends(get_current_referent)):
+    if not user_data:
+        raise HTTPException(status_code=400, detail="Aucune donnée à mettre à jour")
+    
+    allowed_fields = ["nom", "prenom", "email", "type_licence", "est_licencie", "points", "participations"]
+    update_data = {k: v for k, v in user_data.items() if k in allowed_fields}
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="Aucun champ valide à mettre à jour")
+    
+    result = await db.users.update_one(
+        {"id": user_id},
+        {"$set": update_data}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    return User(**user)
+
 @api_router.delete("/referent/users/{user_id}")
 async def delete_user(user_id: str, current_user: dict = Depends(get_current_referent)):
+    if current_user["id"] == user_id:
+        raise HTTPException(status_code=400, detail="Vous ne pouvez pas supprimer votre propre compte")
+    
     result = await db.users.delete_one({"id": user_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
