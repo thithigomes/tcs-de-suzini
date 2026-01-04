@@ -22,8 +22,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-3" data-testid="navbar-logo">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <Trophy className="w-7 h-7 text-[#FF6B35]" />
+            <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B35] to-[#10B981] rounded-full flex items-center justify-center shadow-lg">
+              <Trophy className="w-7 h-7 text-white" />
             </div>
             <span className="font-anton text-2xl text-white tracking-wider">TCS SUZINI</span>
           </Link>
@@ -36,8 +36,8 @@ export default function Navbar() {
                 <Link key={item.path} to={item.path}>
                   <Button
                     variant="ghost"
-                    className={`text-white hover:bg-white/20 transition-colors ${
-                      isActive ? 'bg-white/20' : ''
+                    className={`text-gray-300 hover:bg-white/10 transition-colors ${
+                      isActive ? 'bg-white/10 text-white' : ''
                     }`}
                     data-testid={`nav-link-${item.path}`}
                   >
