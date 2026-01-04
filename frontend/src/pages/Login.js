@@ -129,52 +129,53 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center grain-texture relative overflow-hidden cyber-grid scanline" 
          style={{ 
-           backgroundImage: 'linear-gradient(135deg, rgba(6, 78, 59, 0.95) 0%, rgba(10, 107, 74, 0.9) 50%, rgba(255, 107, 53, 0.85) 100%), url(https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?q=80&w=2000)',
-           backgroundSize: 'cover',
-           backgroundPosition: 'center'
+           background: 'linear-gradient(135deg, #0a0e1a 0%, #0f1729 30%, #1a1f35 60%, #0a0e1a 100%)',
          }}>
       <FloatingBalls />
       
       <div className="relative z-10 w-full max-w-6xl mx-4 grid md:grid-cols-2 gap-8 items-center">
         <div className="text-white space-y-6 hidden md:block">
-          <div className="flex items-center space-x-4 animate-slide-in">
+          <div className="flex flex-col items-center space-y-6 animate-slide-in">
             <img 
               src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
               alt="TCS Suzini Logo" 
-              className="w-24 h-24 rounded-full neon-border animate-pulse-neon"
+              className="w-48 h-48 rounded-full neon-border animate-pulse-neon"
+              style={{ boxShadow: '0 0 60px rgba(255, 107, 53, 0.8), 0 0 120px rgba(132, 204, 22, 0.5)' }}
             />
-            <div>
-              <h1 className="font-anton text-6xl uppercase tracking-wider neon-text" data-testid="login-title">TCS Suzini</h1>
-              <p className="text-xl font-manrope">Beach Volley • Guyane Française</p>
+            <div className="text-center">
+              <h1 className="font-anton text-7xl uppercase tracking-wider neon-text mb-2" data-testid="login-title" style={{ textShadow: '0 0 20px rgba(255, 107, 53, 1), 0 0 40px rgba(255, 107, 53, 0.8), 0 0 60px rgba(132, 204, 22, 0.6)' }}>
+                TCS SUZINI
+              </h1>
+              <p className="text-2xl font-manrope font-bold" style={{ color: '#84CC16', textShadow: '0 0 10px rgba(132, 204, 22, 0.8)' }}>Beach Volley • Guyane</p>
             </div>
           </div>
-          <p className="text-2xl font-manrope font-light animate-slide-in stagger-1">Votre club de beach volleyball en Guyane Française</p>
+          <p className="text-xl font-manrope text-center animate-slide-in stagger-1" style={{ color: '#e0e0e0' }}>Club de beach volleyball professionnel</p>
           <div className="space-y-4 mt-8">
-            <div className="flex items-center space-x-3 animate-slide-in stagger-2 card-hover p-3 rounded-xl glass-card">
-              <div className="w-12 h-12 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
-                <span className="text-2xl">🏐</span>
+            <div className="flex items-center space-x-3 animate-slide-in stagger-2 card-hover p-4 rounded-xl glass-card neon-border">
+              <div className="w-14 h-14 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
+                <span className="text-3xl">🏐</span>
               </div>
-              <p className="text-lg">Entraînements & Jeu libre sur la plage</p>
+              <p className="text-lg font-medium">Entraînements & Jeu libre</p>
             </div>
-            <div className="flex items-center space-x-3 animate-slide-in stagger-3 card-hover p-3 rounded-xl glass-card">
-              <div className="w-12 h-12 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
-                <span className="text-2xl">🏆</span>
+            <div className="flex items-center space-x-3 animate-slide-in stagger-3 card-hover p-4 rounded-xl glass-card neon-border">
+              <div className="w-14 h-14 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
+                <span className="text-3xl">🏆</span>
               </div>
-              <p className="text-lg">Tournois & Compétitions Beach</p>
+              <p className="text-lg font-medium">Tournois & Compétitions</p>
             </div>
-            <div className="flex items-center space-x-3 animate-slide-in stagger-4 card-hover p-3 rounded-xl glass-card">
-              <div className="w-12 h-12 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
-                <span className="text-2xl">⭐</span>
+            <div className="flex items-center space-x-3 animate-slide-in stagger-4 card-hover p-4 rounded-xl glass-card neon-border">
+              <div className="w-14 h-14 rounded-full bg-gradient-energy flex items-center justify-center shadow-lg neon-glow">
+                <span className="text-3xl">⭐</span>
               </div>
-              <p className="text-lg">Badges & Récompenses</p>
+              <p className="text-lg font-medium">Badges & Récompenses</p>
             </div>
           </div>
         </div>
 
-        <Card className="glass-card shadow-2xl neon-border" data-testid="login-card">
+        <Card className="glass-card shadow-2xl neon-border" data-testid="login-card" style={{ boxShadow: '0 0 40px rgba(255, 107, 53, 0.4), 0 20px 60px rgba(0, 0, 0, 0.6)' }}>
           <CardHeader>
-            <CardTitle className="text-3xl font-anton text-[#064E3B] neon-text">BIENVENUE</CardTitle>
-            <CardDescription>Connectez-vous à votre espace membre</CardDescription>
+            <CardTitle className="text-4xl font-anton neon-text text-center" style={{ color: '#FF6B35' }}>BIENVENUE</CardTitle>
+            <CardDescription className="text-center text-gray-400">Connectez-vous à votre espace membre</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
