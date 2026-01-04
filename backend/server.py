@@ -34,11 +34,16 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 43200
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 ADMIN_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', 'thiago.gomes97300@gmail.com')
+REFERENT_SECRET_CODE = "TCS-REF-2025"
 
 if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
 
 logger = logging.getLogger(__name__)
+
+def generate_verification_code():
+    import random
+    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
 class UserRegister(BaseModel):
     email: EmailStr
