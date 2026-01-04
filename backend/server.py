@@ -431,6 +431,28 @@ async def get_my_profile(current_user: dict = Depends(get_current_user)):
     profile = UserProfile(**current_user, achievements=achievement_details)
     return profile
 
+@api_router.patch("/users/me")
+async def update_my_profile(update_data: dict, current_user: dict = Depends(get_current_user)):
+    allowed_fields = ["nom", "prenom", "type_licence", "est_licencie"]
+    update_fields = {k: v for k, v in update_data.items() if k in allowed_fields}
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="Aucun champ valide à mettre à jour")
+    
+    await db.users.update_one(
+        {"id": current_user["id"]},
+        {"$set": update_fields}
+    )
+    
+    user = await db.users.find_one({"id": current_user["id"]}, {"_id": 0, "password_hash": 0})
+    return User(**user)
+
+@api_router.delete("/users/me")
+async def delete_my_account(current_user: dict = Depends(get_current_user)):
+    await db.users.delete_one({"id": current_user["id"]})
+    await db.user_achievements.delete_many({"user_id": current_user["id"]})
+    return {"message": "Compte supprimé avec succès"}
+
 @api_router.get("/referent/users", response_model=List[User])
 async def get_all_users(current_user: dict = Depends(get_current_referent)):
     users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
