@@ -108,6 +108,8 @@ class Tournament(BaseModel):
     statut: str
     participants: List[str] = []
     max_participants: int = 16
+    est_payant: bool = False
+    prix: float = 0.0
 
 class TournamentCreate(BaseModel):
     nom: str
