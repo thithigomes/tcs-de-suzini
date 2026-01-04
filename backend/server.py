@@ -556,7 +556,7 @@ async def get_matches():
     return matches
 
 @api_router.post("/matches", response_model=Match)
-async def create_match(match_data: MatchCreate, current_user: dict = Depends(get_current_admin)):
+async def create_match(match_data: MatchCreate, current_user: dict = Depends(get_current_referent)):
     import uuid
     match_id = str(uuid.uuid4())
     
@@ -581,7 +581,7 @@ async def get_news():
     return news_list
 
 @api_router.post("/news", response_model=News)
-async def create_news(news_data: NewsCreate, current_user: dict = Depends(get_current_admin)):
+async def create_news(news_data: NewsCreate, current_user: dict = Depends(get_current_referent)):
     import uuid
     news_id = str(uuid.uuid4())
     
