@@ -128,7 +128,7 @@ export default function Login() {
       setShowForgotPassword(false);
       setForgotEmail('');
     } catch (error) {
-      toast.error('Erreur lors de l\\'envoi de l\\'email');
+      toast.error("Erreur lors de l'envoi de l'email");
     }
   };
 
