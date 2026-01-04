@@ -379,12 +379,12 @@ export default function Login() {
                   <div>
                     <Label htmlFor="code-secret">Code Secret</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-mono">TCS-REF-</span>
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-mono z-10 pointer-events-none">TCS-REF-</span>
                       <Input
                         id="code-secret"
                         data-testid="referent-code-input"
-                        type="text"
-                        placeholder="2026"
+                        type="password"
+                        placeholder="****"
                         value={referentData.code_secret}
                         onChange={(e) => setReferentData({ ...referentData, code_secret: e.target.value })}
                         required
@@ -392,7 +392,7 @@ export default function Login() {
                         className="pl-24"
                       />
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">Entrez l'année en cours (ex: 2026)</p>
+                    <p className="text-xs text-gray-400 mt-1">Entrez l'année en cours (ex: TCS-REF-****)</p>
                   </div>
                   <Button type="submit" className="w-full btn-primary" disabled={isLoading} data-testid="referent-submit-button">
                     {isLoading ? 'Envoi...' : 'Créer compte Référent'}
