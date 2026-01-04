@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class ReferentAPITester:
-    def __init__(self, base_url="https://tcsvolley.preview.emergentagent.com"):
+    def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.referent_token = None

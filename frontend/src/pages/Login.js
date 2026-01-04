@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../App';
 import { API } from '../App';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 import VolleyballEmojis from '../components/VolleyballEmojis';
 
 export default function Login() {
+  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [showNonLicencieDialog, setShowNonLicencieDialog] = useState(false);
@@ -55,6 +57,21 @@ export default function Login() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGuestLogin = (e) => {
+    e.preventDefault();
+    // Simuler login com token fake para visitante
+    const guestUser = {
+      id: 'guest',
+      email: 'visiteur@temp.com',
+      nom: 'Visiteur',
+      prenom: 'Temporaire',
+      type_licence: 'visiteur'
+    };
+    login('temp-guest-token', guestUser);
+    // Forçar navegação para dashboard
+    setTimeout(() => navigate('/'), 100);
   };
 
   const handleRegister = async (e) => {
@@ -143,9 +160,9 @@ export default function Login() {
           <CardContent className="pt-8 pb-8 px-8">
             <div className="text-center mb-8">
               <img 
-                src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
+                src="/images/tcs-logo.png" 
                 alt="TCS Suzini Logo" 
-                className="w-20 h-20 mx-auto mb-4 rounded-full shadow-lg"
+                className="h-32 w-auto mx-auto mb-4"
               />
               <h1 className="font-anton text-4xl text-[#FF6B35] mb-2" style={{ letterSpacing: '0.05em' }}>
                 TCS de Suzini
@@ -216,6 +233,24 @@ export default function Login() {
                   <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
                     {isLoading ? 'CONNEXION...' : 'SE CONNECTER'}
                   </Button>
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-700"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-[#1a1f2e] text-gray-400">ou</span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleGuestLogin}
+                    className="w-full px-4 py-2 bg-[#252b3d] hover:bg-[#2a3147] border border-gray-700 text-gray-300 rounded-lg transition-colors duration-200"
+                  >
+                    👤 Accès Visiteur (Temporaire)
+                  </button>
+                  <p className="text-xs text-gray-500 text-center">*Données non sauvegardées</p>
                 </form>
               </TabsContent>
 

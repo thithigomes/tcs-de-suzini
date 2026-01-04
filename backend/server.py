@@ -28,6 +28,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'votre-cle-secrete-super-securisee-changez-moi')
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://192.168.1.27:3000')  # URL pour accès réseau
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 43200
 
@@ -178,22 +179,93 @@ class ResetPasswordRequest(BaseModel):
     new_password: str
 
 async def send_email_async(to_email: str, subject: str, html_content: str):
-    if not RESEND_API_KEY or RESEND_API_KEY == 're_123456789':
-        logger.warning(f"Email not sent (no API key): {subject} to {to_email}")
-        return
+    """Enviar email usando Resend API ou SMTP ou salvar em arquivo de teste"""
+    import smtplib
+    from email.mime.text import MIMEText
+    from email.mime.multipart import MIMEMultipart
     
-    params = {
-        "from": SENDER_EMAIL,
-        "to": [to_email],
-        "subject": subject,
-        "html": html_content
-    }
+    SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+    SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+    SMTP_EMAIL = os.environ.get('SMTP_EMAIL', '')
+    SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
     
+    # Se usar Resend API
+    if RESEND_API_KEY and RESEND_API_KEY not in ['your_resend_api_key_here', '']:
+        try:
+            params = {
+                "from": SENDER_EMAIL,
+                "to": [to_email],
+                "subject": subject,
+                "html": html_content
+            }
+            await asyncio.to_thread(resend.Emails.send, params)
+            logger.info(f"✅ Email sent via Resend: {subject} to {to_email}")
+            return
+        except Exception as e:
+            logger.warning(f"⚠️ Resend failed: {str(e)}")
+    
+    # Tentar SMTP se credenciais estão completas
+    if SMTP_EMAIL and SMTP_PASSWORD and SMTP_PASSWORD not in ['sua_app_password_aqui', '']:
+        try:
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = subject
+            msg['From'] = SMTP_EMAIL
+            msg['To'] = to_email
+            
+            html_part = MIMEText(html_content, 'html')
+            msg.attach(html_part)
+            
+            def send_smtp():
+                with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                    server.starttls()
+                    server.login(SMTP_EMAIL, SMTP_PASSWORD)
+                    server.send_message(msg)
+            
+            await asyncio.to_thread(send_smtp)
+            logger.info(f"✅ Email sent via SMTP: {subject} to {to_email}")
+            return
+        except Exception as e:
+            logger.error(f"⚠️ SMTP error: {str(e)}")
+    
+    # Fallback: Salvar em arquivo (para teste/desenvolvimento)
     try:
-        await asyncio.to_thread(resend.Emails.send, params)
-        logger.info(f"Email sent: {subject} to {to_email}")
+        import hashlib
+        email_hash = hashlib.md5(to_email.encode()).hexdigest()[:8]
+        email_file = f"/tmp/email_{email_hash}_{int(datetime.now(timezone.utc).timestamp())}.html"
+        
+        # Extrair código se existir
+        code_match = __import__('re').search(r'>(\d{6})<', html_content)
+        code = code_match.group(1) if code_match else "N/A"
+        
+        with open(email_file, 'w', encoding='utf-8') as f:
+            f.write(f"""
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Email</title></head>
+<body>
+<div style="background: #f0f0f0; padding: 20px; border-radius: 10px;">
+    <h2>📧 Email para: {to_email}</h2>
+    <p><strong>Assunto:</strong> {subject}</p>
+    <p><strong>Código:</strong> <span style="font-size: 24px; font-weight: bold; color: #FF6B35;">{code}</span></p>
+    <hr>
+    {html_content}
+    <hr>
+    <p style="font-size: 12px; color: #999;">Arquivo de teste salvo em: {email_file}</p>
+</div>
+</body>
+</html>
+            """)
+        
+        logger.info(f"✅ Email saved to file: {email_file}")
+        print(f"\n{'='*70}")
+        print(f"📧 EMAIL ENVIADO PARA: {to_email}")
+        print(f"Assunto: {subject}")
+        print(f"Código: {code}")
+        print(f"Arquivo: {email_file}")
+        print(f"{'='*70}\n")
+        
     except Exception as e:
-        logger.error(f"Failed to send email: {str(e)}")
+        logger.error(f"❌ Failed to save email: {str(e)}")
 
 def create_access_token(data: dict):
     to_encode = data.copy()
@@ -376,20 +448,176 @@ async def forgot_password(request: ForgotPasswordRequest):
     
     reset_token = create_access_token({"sub": user["id"], "type": "reset"})
     
-    reset_link = f"https://tcsvolley.preview.emergentagent.com/reset-password?token={reset_token}"
+    reset_link = f"{FRONTEND_URL}/reset-password?token={reset_token}"
+    
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Réinitialisation de mot de passe - TCS de Suzini</title>
+        <style>
+            body {{
+                font-family: 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+                background: linear-gradient(135deg, #1a1f2e 0%, #252b3d 100%);
+                margin: 0;
+                padding: 20px;
+            }}
+            .email-container {{
+                max-width: 600px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                overflow: hidden;
+            }}
+            .header {{
+                background: linear-gradient(135deg, #FF6B35 0%, #064E3B 100%);
+                padding: 40px 20px;
+                text-align: center;
+                color: white;
+            }}
+            .header h1 {{
+                margin: 0;
+                font-size: 28px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }}
+            .content {{
+                padding: 40px 30px;
+                color: #1a1f2e;
+                line-height: 1.8;
+            }}
+            .greeting {{
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                color: #064E3B;
+            }}
+            .message {{
+                font-size: 16px;
+                color: #333;
+                margin-bottom: 30px;
+            }}
+            .message p {{
+                margin: 12px 0;
+            }}
+            .button-container {{
+                text-align: center;
+                margin: 40px 0;
+            }}
+            .reset-button {{
+                display: inline-block;
+                background: linear-gradient(135deg, #FF6B35 0%, #FF8A5B 100%);
+                color: white !important;
+                padding: 16px 40px;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 16px;
+                box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+                transition: all 0.3s ease;
+            }}
+            .reset-button:hover {{
+                background: linear-gradient(135deg, #E85A25 0%, #FF7A4B 100%);
+                box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+                transform: translateY(-2px);
+            }}
+            .link-section {{
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                margin: 30px 0;
+                text-align: center;
+            }}
+            .link-section p {{
+                margin: 0;
+                font-size: 14px;
+                color: #666;
+            }}
+            .link-section a {{
+                color: #FF6B35;
+                word-break: break-all;
+                text-decoration: none;
+                font-weight: 500;
+            }}
+            .footer {{
+                padding: 30px;
+                background: #f5f5f5;
+                text-align: center;
+                font-size: 12px;
+                color: #999;
+                border-top: 1px solid #e0e0e0;
+            }}
+            .footer p {{
+                margin: 8px 0;
+            }}
+            .warning {{
+                background: #fff3cd;
+                padding: 15px;
+                border-left: 4px solid #FF6B35;
+                border-radius: 4px;
+                margin: 20px 0;
+                font-size: 14px;
+                color: #666;
+            }}
+            .logo-text {{
+                font-weight: 700;
+                color: #FF6B35;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <div class="logo-text">🏐 TCS DE SUZINI</div>
+                <h1>Réinitialisation de Mot de Passe</h1>
+            </div>
+            
+            <div class="content">
+                <p class="greeting">Bonjour {user['prenom']},</p>
+                
+                <div class="message">
+                    <p>Vous avez demandé une réinitialisation de votre mot de passe pour accéder à votre compte <strong>TCS de Suzini</strong>.</p>
+                    
+                    <p>Veuillez cliquer sur le bouton ci-dessous pour créer un nouveau mot de passe sécurisé:</p>
+                </div>
+                
+                <div class="button-container">
+                    <a href="{reset_link}" class="reset-button">Réinitialiser mon mot de passe</a>
+                </div>
+                
+                <div class="link-section">
+                    <p>Ou copiez ce lien dans votre navigateur:</p>
+                    <p><a href="{reset_link}">{reset_link}</a></p>
+                </div>
+                
+                <div class="warning">
+                    <strong>⏱️ Important:</strong> Ce lien de réinitialisation expirera dans <strong>30 jours</strong> pour des raisons de sécurité.
+                </div>
+                
+                <p style="margin-top: 30px; font-size: 14px; color: #666;">
+                    Si vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet email. Votre compte reste en sécurité.
+                </p>
+            </div>
+            
+            <div class="footer">
+                <p><strong>TCS de Suzini - Beach Volleyball Club</strong></p>
+                <p>Gestion des Membres | Tournois | Entraînements</p>
+                <p style="margin-top: 15px; color: #bbb;">© 2026 TCS de Suzini. Tous droits réservés.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
     
     await send_email_async(
         request.email,
-        "Réinitialisation de votre mot de passe - TCS Suzini",
-        f"""
-        <h2>Réinitialisation de mot de passe</h2>
-        <p>Bonjour {user['prenom']},</p>
-        <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
-        <p>Cliquez sur le lien ci-dessous pour créer un nouveau mot de passe:</p>
-        <p><a href="{reset_link}" style="background: #FF6B35; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; display: inline-block;">Réinitialiser mon mot de passe</a></p>
-        <p>Ce lien expirera dans 30 jours.</p>
-        <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
-        """
+        "Réinitialisation de votre mot de passe - TCS de Suzini",
+        html_content
     )
     
     return {"message": "Si l'email existe, un lien de réinitialisation a été envoyé"}
@@ -688,6 +916,23 @@ async def check_and_award_achievements(user_id: str):
                         {"id": user_id},
                         {"$inc": {"points": achievement["points"]}}
                     )
+
+@api_router.post("/test-email")
+async def test_email(email: str):
+    """Endpoint de teste para enviar email"""
+    await send_email_async(
+        email,
+        "🧪 Teste de Email - TCS de Suzini",
+        f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h1 style="color: #FF6B35; text-align: center;">✅ Email de Teste</h1>
+            <p>Este é um email de teste do sistema TCS de Suzini.</p>
+            <p>Se você recebeu este email, o sistema de email está funcionando corretamente!</p>
+            <p style="color: #999; margin-top: 30px; font-size: 12px;">Enviado em: {datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M:%S')}</p>
+        </div>
+        """
+    )
+    return {"message": f"Email de teste enviado para {email}"}
 
 @api_router.post("/seed-data")
 async def seed_data():

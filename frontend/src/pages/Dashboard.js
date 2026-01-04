@@ -20,6 +20,17 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        // Se for visitante (guest), usar dados mockados
+        if (user?.type_licence === 'visiteur') {
+          setStats({
+            tournaments: 5,
+            upcomingMatches: 3,
+            userRank: 'N/A',
+            achievements: 2
+          });
+          return;
+        }
+
         const [tournamentsRes, matchesRes, profileRes] = await Promise.all([
           axios.get(`${API}/tournaments`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${API}/matches`, { headers: { Authorization: `Bearer ${token}` } }),

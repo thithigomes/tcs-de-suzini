@@ -21,9 +21,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-3" data-testid="navbar-logo">
             <img 
-              src="https://customer-assets.emergentagent.com/job_tcsvolley/artifacts/h6inbvsa_WhatsApp%20Image%202025-12-19%20at%2003.44.40.jpeg" 
+              src="/images/tcs-logo.png" 
               alt="TCS Suzini Logo" 
-              className="w-12 h-12 rounded-full shadow-lg"
+              className="h-14 w-auto"
             />
           </Link>
 

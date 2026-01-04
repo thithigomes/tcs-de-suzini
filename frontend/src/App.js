@@ -40,6 +40,11 @@ function App() {
     const fetchUser = async () => {
       if (token) {
         try {
+          // Se for visitante, não fazer requisição
+          if (token === 'temp-guest-token') {
+            setLoading(false);
+            return;
+          }
           const response = await axios.get(`${API}/users/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });

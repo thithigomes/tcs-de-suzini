@@ -1,0 +1,25 @@
+# 🇬🇫 Padrões de Dados - Guiana Francesa
+
+## Formato de Telefone
+- **Padrão**: +594 XXX XX XX XX ou 0594 XX XX XX
+- **Exemplo**: +594 594 25 12 34
+- **Código do país**: +594
+- **Prefixo local**: 594
+
+## Moeda
+- **Moeda oficial**: Euro (€) - EUR
+- **Símbolo**: €
+
+## Horário
+- **Fuso horário**: UTC-3 (Hora de Brasília)
+- **Formato de data**: DD/MM/YYYY
+
+## Localização
+- **País**: Guiana Francesa (Guyane française)
+- **Departamento**: Ultramarino da França
+- **Idioma**: Francês
+
+## Observações do Projeto
+- Todos os números de telefone devem seguir o padrão +594 XXX XX XX XX
+- O projeto TCS de Suzini está localizado na Guiana Francesa
+- Adaptar todos os exemplos, placeholders e mensagens para o contexto local
