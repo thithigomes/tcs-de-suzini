@@ -12,7 +12,7 @@ export default function FloatingBalls() {
     canvas.height = window.innerHeight;
 
     const balls = [];
-    const colors = ['#FF6B35', '#064E3B', '#84CC16', '#FFF7ED'];
+    const colors = ['#FF6B35', '#FF8C42', '#84CC16', '#064E3B'];
     
     class Ball {
       constructor() {
