@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
+import { Toaster } from "./components/ui/sonner";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Tournaments from "./pages/Tournaments";
