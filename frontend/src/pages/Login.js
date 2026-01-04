@@ -379,7 +379,6 @@ export default function Login() {
                         className="bg-[#252b3d] border-gray-700 text-white pl-24"
                       />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">Année en cours (ex: TCS-REF-****)</p>
                   </div>
 
                   <Button type="submit" className="w-full btn-secondary" disabled={isLoading}>
