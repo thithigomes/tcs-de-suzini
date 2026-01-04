@@ -54,7 +54,7 @@ export default function Navbar() {
               <Link to="/referent">
                 <Button
                   variant="ghost"
-                  className="text-white hover:bg-white/20"
+                  className="text-gray-300 hover:bg-white/10"
                   data-testid="nav-referent-link"
                 >
                   <Shield className="w-4 h-4 mr-2" />
@@ -66,7 +66,7 @@ export default function Navbar() {
               <Link to="/admin">
                 <Button
                   variant="ghost"
-                  className="text-white hover:bg-white/20"
+                  className="text-gray-300 hover:bg-white/10"
                   data-testid="nav-admin-link"
                 >
                   <Shield className="w-4 h-4 mr-2" />
@@ -77,7 +77,7 @@ export default function Navbar() {
             <Link to="/profile">
               <Button
                 variant="ghost"
-                className="text-white hover:bg-white/20"
+                className="text-gray-300 hover:bg-white/10"
                 data-testid="nav-profile-link"
               >
                 <User className="w-4 h-4 mr-2" />
@@ -87,7 +87,7 @@ export default function Navbar() {
             <Button
               onClick={logout}
               variant="ghost"
-              className="text-white hover:bg-white/20"
+              className="text-gray-300 hover:bg-white/10"
               data-testid="nav-logout-button"
             >
               <LogOut className="w-4 h-4 mr-2" />
