@@ -115,6 +115,8 @@ class TournamentCreate(BaseModel):
     date_debut: str
     date_fin: str
     max_participants: int = 16
+    est_payant: bool = False
+    prix: float = 0.0
 
 class Match(BaseModel):
     model_config = ConfigDict(extra="ignore")
