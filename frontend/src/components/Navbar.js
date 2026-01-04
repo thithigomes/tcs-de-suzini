@@ -49,50 +49,36 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             {user?.role === 'referent' && (
               <Link to="/referent">
-                <Button
-                  variant="ghost"
-                  className="text-gray-300 hover:bg-white/10"
-                  data-testid="nav-referent-link"
-                >
-                  <span className="mr-2">🔐</span>
-                  R\u00e9f\u00e9rent
-                </Button>
+                <div className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#10B981] text-white hover:bg-[#059669] transition-all cursor-pointer shadow-lg">
+                  <span className="text-lg">🔐</span>
+                  <span className="font-medium">Référent</span>
+                </div>
               </Link>
             )}
             {user?.role === 'admin' && (
               <Link to="/admin">
-                <Button
-                  variant="ghost"
-                  className="text-gray-300 hover:bg-white/10"
-                  data-testid="nav-admin-link"
-                >
-                  <span className="mr-2">⚙️</span>
-                  Admin
-                </Button>
+                <div className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#8B5CF6] text-white hover:bg-[#7C3AED] transition-all cursor-pointer shadow-lg">
+                  <span className="text-lg">⚙️</span>
+                  <span className="font-medium">Admin</span>
+                </div>
               </Link>
             )}
             <Link to="/profile">
-              <Button
-                variant="ghost"
-                className="text-gray-300 hover:bg-white/10"
-                data-testid="nav-profile-link"
-              >
-                <span className="mr-2">👤</span>
-                Profil
-              </Button>
+              <div className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#06B6D4] text-white hover:bg-[#0891B2] transition-all cursor-pointer shadow-lg">
+                <span className="text-lg">👤</span>
+                <span className="font-medium">Profil</span>
+              </div>
             </Link>
-            <Button
+            <div 
               onClick={logout}
-              variant="ghost"
-              className="text-gray-300 hover:bg-white/10"
-              data-testid="nav-logout-button"
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#EF4444] text-white hover:bg-[#DC2626] transition-all cursor-pointer shadow-lg"
             >
-              <span className="mr-2">🚪</span>
-              Déconnexion
-            </Button>
+              <span className="text-lg">👋</span>
+              <span className="font-medium">Déconnexion</span>
+            </div>
           </div>
         </div>
       </div>
