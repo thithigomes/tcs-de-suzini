@@ -1,0 +1,149 @@
+{
+  "identity": {
+    "name": "E1",
+    "role": "Creative Designer",
+    "aesthetic": "Tropical Kinetic",
+    "principles": [
+      "Fusion over Imitation: Mix Tropical Nature with High-Performance Sport",
+      "Emotion First: Every interaction should feel energetic and motivating",
+      "Content is King: Data (scores, rankings) must be beautiful and scannable",
+      "Zoom In: Focus on the players and the action",
+      "Negative Space: Use 'Warm Sand' space to let the vibrant colors breathe"
+    ]
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Anton, sans-serif",
+      "weight": "400",
+      "usage": "Main page titles, hero text, big stats",
+      "letter_spacing": "tracking-wide",
+      "transform": "uppercase"
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "weight": "400, 500, 700",
+      "usage": "UI elements, paragraphs, data tables",
+      "letter_spacing": "tracking-normal"
+    },
+    "installation": "Import via Google Fonts in index.css: @import url('https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700&display=swap');"
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "name": "Electric Tangerine",
+        "hex": "#FF6B35",
+        "usage": "CTAs, Active States, Highlights",
+        "tailwind": "bg-[#FF6B35] text-white"
+      },
+      "secondary": {
+        "name": "Deep Jungle Green",
+        "hex": "#064E3B",
+        "usage": "Sidebars, Footers, Headings, Text",
+        "tailwind": "bg-[#064E3B] text-white"
+      },
+      "accent": {
+        "name": "Lime Punch",
+        "hex": "#84CC16",
+        "usage": "Badges, Success States, Progress Bars",
+        "tailwind": "bg-[#84CC16] text-black"
+      },
+      "neutral": {
+        "name": "Warm Sand",
+        "hex": "#FFF7ED",
+        "usage": "Main Background (Light Mode)",
+        "tailwind": "bg-[#FFF7ED]"
+      },
+      "surface": {
+        "name": "White Glass",
+        "hex": "#FFFFFF",
+        "usage": "Cards, Panels",
+        "tailwind": "bg-white/80 backdrop-blur-md border border-[#FF6B35]/20"
+      }
+    },
+    "gradients": {
+      "tropical_dusk": "bg-gradient-to-br from-[#FF6B35] to-[#064E3B]",
+      "energy_boost": "bg-gradient-to-r from-[#FF6B35] to-[#84CC16]"
+    }
+  },
+  "layout": {
+    "grid_system": "Bento Grid",
+    "spacing": "Generous (2x standard)",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "modes": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6",
+      "marketing": "grid grid-cols-1 md:grid-cols-12 gap-8"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#FF6B35] hover:bg-[#E65100] text-white font-manrope font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1",
+      "secondary": "bg-transparent border-2 border-[#064E3B] text-[#064E3B] hover:bg-[#064E3B] hover:text-white font-manrope font-bold py-3 px-8 rounded-full transition-all duration-300"
+    },
+    "cards": {
+      "style": "bg-white/90 backdrop-blur-sm border border-orange-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300",
+      "gamified": "relative overflow-hidden border-2 border-[#84CC16] bg-[#F0FDF4]"
+    },
+    "badges": {
+      "style": "inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
+      "competition": "bg-[#FF6B35]/10 text-[#FF6B35] border border-[#FF6B35]/20",
+      "jeu_libre": "bg-[#064E3B]/10 text-[#064E3B] border border-[#064E3B]/20"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-white/70 border border-white/20 shadow-xl",
+    "shadows": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+    "textures": "Use subtle noise texture on the 'Warm Sand' background to give it a paper/court feel"
+  },
+  "gamification": {
+    "elements": [
+      "Progress Bars: Use 'Energy Boost' gradient",
+      "Badges: 3D-style icons for achievements",
+      "Leaderboards: Highlight top 3 with Gold/Silver/Bronze accents"
+    ]
+  },
+  "image_urls": {
+    "hero_action": [
+      "https://images.unsplash.com/photo-1765109384407-a7d1180796b1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwxfHx2b2xsZXliYWxsJTIwbWF0Y2glMjBhY3Rpb24lMjBpbmRvb3J8ZW58MHx8fHwxNzY3NTAxNTU4fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1765109371543-1039e5648184?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwyfHx2b2xsZXliYWxsJTIwbWF0Y2glMjBhY3Rpb24lMjBpbmRvb3J8ZW58MHx8fHwxNzY3NTAxNTU4fDA&ixlib=rb-4.1.0&q=85"
+    ],
+    "team_community": [
+      "https://images.unsplash.com/photo-1663246544984-2730f63628b4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHx2b2xsZXliYWxsJTIwdGVhbSUyMGNlbGVicmF0aW5nJTIwaHVkZGxlfGVufDB8fHx8MTc2NzUwMTU2MHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1661030420917-42f498759791?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwyfHx2b2xsZXliYWxsJTIwdGVhbSUyMGNlbGVicmF0aW5nJTIwaHVkZGxlfGVufDB8fHx8MTc2NzUwMTU2MHww&ixlib=rb-4.1.0&q=85"
+    ],
+    "tropical_bg": [
+      "https://images.unsplash.com/photo-1628870571205-7e781523bfbc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHx0cm9waWNhbCUyMHZvbGxleWJhbGwlMjBjb3VydCUyMGZyZW5jaCUyMGd1aWFuYSUyMHZpYmV8ZW58MHx8fHwxNzY3NTAxNTYxfDA&ixlib=rb-4.1.0&q=85"
+    ],
+    "achievements": [
+      "https://images.unsplash.com/photo-1754300681803-61eadeb79d10?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMGdvbGQlMjB0cm9waHklMjBpY29uJTIwbWluaW1hbGlzdHxlbnwwfHx8fDE3Njc1MDE1NzR8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/8817668/pexels-photo-8817668.jpeg"
+    ]
+  },
+  "instructions_to_main_agent": {
+    "file_structure": "The project uses .js files, NOT .tsx. Ensure all React components are saved as .js.",
+    "icons": "Use 'lucide-react' for all UI icons. Use the provided image URLs for 'Badges' and 'Hero' sections.",
+    "language": "The app MUST be in French. Use the provided French terms (Tableau de bord, Prochains matchs, etc.).",
+    "auth_flow": "Implement the 'Competition' vs 'Jeu Libre' selection logic during registration. Show 'Demandez une période d'essai' for non-licensed users.",
+    "shadcn": "Customize Shadcn components in /components/ui to match the 'Electric Tangerine' and 'Deep Jungle' palette. Override default 'ring-offset' and 'focus-visible' styles to use orange rings."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file. This disrupts the human natural reading flow of text",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯📚🎭🎬🎪🎉🎊🎁🎀🎂🍰🎈🎨🎰💰💵💳🏦💎🪙💸🤑📊📈📉💹🔢🏆🥇 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN",
+    "Prioritize using pre-existing components from src/components/ui when applicable",
+    "Create new components that match the style and conventions of existing components when needed",
+    "Examine existing components to understand the project's component patterns before creating new ones",
+    "Components MUST use named exports (export const ComponentName = ...)",
+    "Pages MUST use default exports (export default function PageName() {...})",
+    "Use 'sonner' for toasts. Sonner component are located in /app/src/components/ui/sonner.tsx"
+  ]
+}
