@@ -1,0 +1,33 @@
+🚀 DEPLOY VERCEL - 3 CLIQUES
+
+========================================
+PASSO 1: Abra Vercel
+========================================
+1. Vá para: https://vercel.com/new
+2. Clique em "Continue with GitHub"
+3. Autorize Vercel a acessar seus repos
+
+========================================
+PASSO 2: Selecione o repo
+========================================
+1. Procure por: "tcs-voleyball"
+2. Clique "Import"
+3. Deixe as settings padrão (não muda nada)
+
+========================================
+PASSO 3: Deploy
+========================================
+1. Clique no botão "Deploy"
+2. Aguarde 3-5 minutos
+3. Pronto! Seu site está em:
+   👉 https://tcs-voleyball.vercel.app
+
+========================================
+CONFIGURAÇÕES (já estão corretas):
+========================================
+✅ Root Directory: frontend
+✅ Build: npm run build
+✅ Output: build
+
+Qualquer push novo no GitHub = novo deploy automático! 🔄
+
