@@ -34,7 +34,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 43200
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 ADMIN_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', 'thiago.gomes97300@gmail.com')
-REFERENT_SECRET_CODE = str(datetime.now(timezone.utc).year)
+REFERENT_SECRET_CODE = f"TCS-REF-{datetime.now(timezone.utc).year}"
 
 if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
