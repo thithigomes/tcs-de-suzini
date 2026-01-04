@@ -4,9 +4,8 @@ import { API } from '../App';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import FloatingBalls from '../components/FloatingBalls';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Trophy, Calendar, TrendingUp, Award, Users, Newspaper } from 'lucide-react';
+import VolleyballEmojis from '../components/VolleyballEmojis';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -45,108 +44,123 @@ export default function Dashboard() {
   }, [token]);
 
   const quickStats = [
-    { title: 'Tournois Actifs', value: stats.tournaments, icon: Trophy, color: 'bg-[#FF6B35]', link: '/tournaments', testId: 'stat-tournaments' },
-    { title: 'Prochains Matchs', value: stats.upcomingMatches, icon: Calendar, color: 'bg-[#064E3B]', link: '/matches', testId: 'stat-matches' },
-    { title: 'Vos Points', value: stats.userRank, icon: TrendingUp, color: 'bg-[#84CC16]', link: '/rankings', testId: 'stat-points' },
-    { title: 'Badges Obtenus', value: stats.achievements, icon: Award, color: 'bg-[#FF6B35]', link: '/profile', testId: 'stat-badges' }
+    { title: 'Tournois Actifs', value: stats.tournaments, emoji: '🏆', color: 'from-[#FF6B35] to-[#ff8854]', link: '/tournaments' },
+    { title: 'Prochains Matchs', value: stats.upcomingMatches, emoji: '📅', color: 'from-[#10B981] to-[#34d399]', link: '/matches' },
+    { title: 'Vos Points', value: stats.userRank, emoji: '⭐', color: 'from-[#84CC16] to-[#a3e635]', link: '/rankings' },
+    { title: 'Badges', value: stats.achievements, emoji: '🎖️', color: 'from-[#8B5CF6] to-[#a78bfa]', link: '/profile' }
+  ];
+
+  const menuItems = [
+    { name: 'Tournois', emoji: '🏆', description: 'Inscrivez-vous aux compétitions', link: '/tournaments', color: 'bg-[#FF6B35]' },
+    { name: 'Matchs', emoji: '⚽', description: 'Calendrier des rencontres', link: '/matches', color: 'bg-[#10B981]' },
+    { name: 'Classement', emoji: '📊', description: 'Voir le ranking', link: '/rankings', color: 'bg-[#84CC16]' },
+    { name: 'Entraînements', emoji: '💪', description: 'Horaires et sessions', link: '/training', color: 'bg-[#8B5CF6]' },
+    { name: 'Actualités', emoji: '📰', description: 'Nouvelles du club', link: '/news', color: 'bg-[#F59E0B]' },
+    { name: 'Mon Profil', emoji: '👤', description: 'Vos informations', link: '/profile', color: 'bg-[#06B6D4]' }
   ];
 
   return (
-    <div className="min-h-screen bg-[#FFF7ED] relative flex flex-col">
-      <FloatingBalls />
+    <div className="min-h-screen relative flex flex-col" style={{ background: '#1a1f2e' }}>
+      <VolleyballEmojis />
+      <div className="grain-texture absolute inset-0"></div>
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 flex-1">
-        <div className="mb-8 animate-slide-in" data-testid="dashboard-welcome">
-          <h1 className="text-4xl md:text-5xl font-anton uppercase text-[#064E3B] tracking-wider">Tableau de Bord</h1>
-          <p className="text-lg text-gray-600 mt-2">Bienvenue, {user?.prenom} {user?.nom}!</p>
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl font-anton uppercase text-white tracking-wider">
+            Bienvenue, {user?.prenom}! 🏐
+          </h1>
+          <p className="text-lg text-gray-400 mt-2">Tableau de bord - TCS de Suzini</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {quickStats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Link key={index} to={stat.link}>
-                <Card className={`glass-card card-hover cursor-pointer animate-slide-in stagger-${index + 1}`} data-testid={stat.testId}>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
-                        <p className="text-3xl font-bold text-[#064E3B]">{stat.value}</p>
-                      </div>
-                      <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center transform rotate-3`}>
-                        <Icon className="w-7 h-7 text-white" />
-                      </div>
+          {quickStats.map((stat, index) => (
+            <Link key={index} to={stat.link}>
+              <Card className="glass-card card-hover cursor-pointer border-0">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">{stat.title}</p>
+                      <p className="text-4xl font-bold text-white">{stat.value}</p>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
+                    <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center text-3xl shadow-lg`}>
+                      {stat.emoji}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card className="glass-card" data-testid="quick-access-card">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card className="glass-card border-0">
             <CardHeader>
-              <CardTitle className="text-2xl font-anton uppercase text-[#064E3B]">Accès Rapide</CardTitle>
-              <CardDescription>Naviguer vers les sections principales</CardDescription>
+              <CardTitle className="text-2xl font-anton uppercase text-white">Accès Rapide</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <Link to="/tournaments">
-                <div className="p-4 bg-white rounded-xl hover:bg-[#FF6B35]/10 transition-colors cursor-pointer flex items-center space-x-3" data-testid="quick-tournaments-link">
-                  <Trophy className="w-5 h-5 text-[#FF6B35]" />
-                  <span className="font-medium text-[#064E3B]">Voir les Tournois</span>
-                </div>
-              </Link>
-              <Link to="/training">
-                <div className="p-4 bg-white rounded-xl hover:bg-[#FF6B35]/10 transition-colors cursor-pointer flex items-center space-x-3" data-testid="quick-training-link">
-                  <Calendar className="w-5 h-5 text-[#FF6B35]" />
-                  <span className="font-medium text-[#064E3B]">Horaires d'Entraînement</span>
-                </div>
-              </Link>
-              <Link to="/rankings">
-                <div className="p-4 bg-white rounded-xl hover:bg-[#FF6B35]/10 transition-colors cursor-pointer flex items-center space-x-3" data-testid="quick-rankings-link">
-                  <TrendingUp className="w-5 h-5 text-[#FF6B35]" />
-                  <span className="font-medium text-[#064E3B]">Classement du Club</span>
-                </div>
-              </Link>
-              <Link to="/news">
-                <div className="p-4 bg-white rounded-xl hover:bg-[#FF6B35]/10 transition-colors cursor-pointer flex items-center space-x-3" data-testid="quick-news-link">
-                  <Newspaper className="w-5 h-5 text-[#FF6B35]" />
-                  <span className="font-medium text-[#064E3B]">Actualités du Club</span>
-                </div>
-              </Link>
+            <CardContent className="grid grid-cols-2 gap-4">
+              {menuItems.map((item, index) => (
+                <Link key={index} to={item.link}>
+                  <div className="p-4 glass-card hover:bg-white/10 transition-all cursor-pointer card-hover border-0">
+                    <div className="flex flex-col items-center text-center space-y-2">
+                      <div className={`w-14 h-14 ${item.color} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
+                        {item.emoji}
+                      </div>
+                      <h3 className="font-bold text-white text-sm">{item.name}</h3>
+                      <p className="text-xs text-gray-400">{item.description}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </CardContent>
           </Card>
 
-          <Card className="glass-card" data-testid="licence-info-card">
+          <Card className="glass-card border-0">
             <CardHeader>
-              <CardTitle className="text-2xl font-anton uppercase text-[#064E3B]">Votre Licence</CardTitle>
-              <CardDescription>Informations sur votre statut membre</CardDescription>
+              <CardTitle className="text-2xl font-anton uppercase text-white">Votre Statut</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white rounded-xl">
-                <span className="text-gray-600">Type de licence</span>
-                <span className={`${user?.type_licence === 'competition' ? 'badge-competition' : 'badge-jeu-libre'}`}>
+              <div className="flex items-center justify-between p-4 glass-card border-0">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">🎫</span>
+                  <span className="text-gray-300">Type de licence</span>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-bold ${
+                  user?.type_licence === 'competition' 
+                    ? 'bg-[#FF6B35]/20 text-[#FF6B35] border border-[#FF6B35]' 
+                    : 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]'
+                }`}>
                   {user?.type_licence === 'competition' ? 'Compétition' : 'Jeu Libre'}
                 </span>
               </div>
-              <div className="flex items-center justify-between p-4 bg-white rounded-xl">
-                <span className="text-gray-600">Statut</span>
-                <span className={`badge-achievement ${user?.est_licencie ? 'bg-[#84CC16]/20 text-[#84CC16]' : 'bg-gray-200 text-gray-600'}`}>
+
+              <div className="flex items-center justify-between p-4 glass-card border-0">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">✅</span>
+                  <span className="text-gray-300">Statut</span>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-bold ${
+                  user?.est_licencie 
+                    ? 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]' 
+                    : 'bg-gray-500/20 text-gray-400 border border-gray-500'
+                }`}>
                   {user?.est_licencie ? 'Licencié' : 'Non licencié'}
                 </span>
               </div>
-              <div className="flex items-center justify-between p-4 bg-white rounded-xl">
-                <span className="text-gray-600">Participations</span>
-                <span className="font-bold text-[#064E3B] text-xl">{user?.participations || 0}</span>
+
+              <div className="flex items-center justify-between p-4 glass-card border-0">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">🎯</span>
+                  <span className="text-gray-300">Participations</span>
+                </div>
+                <span className="text-2xl font-bold text-white">{user?.participations || 0}</span>
               </div>
-              
+
               {user?.type_licence === 'competition' && (
-                <div className="mt-4 p-4 bg-gradient-energy rounded-xl text-white">
-                  <p className="font-bold mb-1">Avantages Compétition</p>
-                  <ul className="text-sm space-y-1">
-                    <li>✓ Accès aux entraînements dirigés</li>
-                    <li>✓ Participation au jeu libre</li>
+                <div className="mt-4 p-4 bg-gradient-to-r from-[#FF6B35] to-[#10B981] rounded-xl">
+                  <p className="font-bold text-white mb-2">🌟 Avantages Compétition</p>
+                  <ul className="text-sm text-white/90 space-y-1">
+                    <li>✓ Entraînements dirigés</li>
+                    <li>✓ Jeu libre</li>
                     <li>✓ Inscription aux tournois</li>
                   </ul>
                 </div>
