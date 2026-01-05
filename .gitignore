@@ -84,3 +84,4 @@ android-sdk/ -e
 !.env.example
 !frontend/.env.example
 !backend/.env.example
+.env*.local

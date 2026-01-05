@@ -1073,7 +1073,13 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "https://tcs-de-suzini.vercel.app",
+        "https://tcs-de-suzini-*.vercel.app",
+        "http://192.168.1.27:3000",
+    ] if os.environ.get('CORS_ORIGINS') is None else os.environ.get('CORS_ORIGINS', '*').split(','),
     allow_methods=["*"],
     allow_headers=["*"],
 )
