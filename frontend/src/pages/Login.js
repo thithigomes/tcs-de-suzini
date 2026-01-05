@@ -52,8 +52,8 @@ export default function Login() {
       const response = await axios.post(`${API}/auth/login`, loginData);
       login(response.data.token, response.data.user);
       toast.success('Connexion réussie!');
-      // Esperar um pouco mais para o state atualizar
-      setTimeout(() => navigate('/'), 200);
+      // Esperar o estado atualizar completamente antes de navegar
+      setTimeout(() => navigate('/'), 500);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Erreur de connexion');
     } finally {
@@ -73,7 +73,7 @@ export default function Login() {
     };
     login('temp-guest-token', guestUser);
     // Forçar navegação para dashboard
-    setTimeout(() => navigate('/'), 200);
+    setTimeout(() => navigate('/'), 500);
   };
 
   const handleRegister = async (e) => {
@@ -89,7 +89,7 @@ export default function Login() {
       const response = await axios.post(`${API}/auth/register`, registerData);
       login(response.data.token, response.data.user);
       toast.success('Inscription réussie!');
-      setTimeout(() => navigate('/'), 200);
+      setTimeout(() => navigate('/'), 500);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Erreur d'inscription");
     } finally {
