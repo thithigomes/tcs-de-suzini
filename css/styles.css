@@ -717,6 +717,8 @@ html, body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
 }
+
+.game-card {
     background: linear-gradient(135deg, var(--card-bg) 0%, var(--light-bg) 100%);
     border: 2px solid var(--border-color);
     border-radius: 15px;
@@ -928,13 +930,8 @@ html, body {
     margin-bottom: 15px;
     line-height: 1.5;
 }
+
 .ranking-container {
-    background: linear-gradient(135deg, var(--card-bg) 0%, var(--light-bg) 100%);
-    border: 1px solid var(--border-color);
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
     background: linear-gradient(135deg, var(--card-bg) 0%, var(--light-bg) 100%);
     border: 1px solid var(--border-color);
     border-radius: 15px;

@@ -18,8 +18,18 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+
+# Try to connect to MongoDB with timeout
+try:
+    client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000)
+    db = client[os.environ['DB_NAME']]
+    # Test connection immediately
+    logger_test = logging.getLogger(__name__)
+    logger_test.info("Attempting MongoDB connection...")
+except Exception as e:
+    print(f"Warning: MongoDB connection failed ({str(e)[:50]}...). Using fallback data store.")
+    client = None
+    db = None
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -41,6 +51,65 @@ if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
 
 logger = logging.getLogger(__name__)
+
+# Fallback in-memory data store when MongoDB is unavailable
+FALLBACK_DATA = {
+    "training_schedule": [],
+    "users": [],
+    "tournaments": [],
+    "matches": [],
+    "news": [],
+    "achievements": []
+}
+
+# Initialize training schedules in fallback
+FALLBACK_DATA["training_schedule"] = [
+    {
+        "id": "lundi_entrainement",
+        "jour": "Lundi",
+        "heure_debut": "18:00",
+        "heure_fin": "20:00",
+        "type": "Entraînement",
+        "licence_requise": "competition",
+        "description": "Entraînement dirigé pour les licenciés Compétition"
+    },
+    {
+        "id": "lundi_jeu_livre",
+        "jour": "Lundi",
+        "heure_debut": "20:00",
+        "heure_fin": "22:00",
+        "type": "Jeu Libre",
+        "licence_requise": "tous",
+        "description": "Jeu libre ouvert à tous les licenciés"
+    },
+    {
+        "id": "mercredi_entrainement",
+        "jour": "Mercredi",
+        "heure_debut": "18:00",
+        "heure_fin": "20:00",
+        "type": "Entraînement",
+        "licence_requise": "competition",
+        "description": "Entraînement dirigé pour les licenciés Compétition"
+    },
+    {
+        "id": "mercredi_jeu_livre",
+        "jour": "Mercredi",
+        "heure_debut": "20:00",
+        "heure_fin": "22:00",
+        "type": "Jeu Livre",
+        "licence_requise": "tous",
+        "description": "Jeu libre ouvert à tous les licenciés"
+    },
+    {
+        "id": "vendredi_jeu_livre",
+        "jour": "Vendredi",
+        "heure_debut": "18:00",
+        "heure_fin": "22:00",
+        "type": "Jeu Livre",
+        "licence_requise": "tous",
+        "description": "Jeu libre ouvert à todos os licenciés"
+    }
+]
 
 def generate_verification_code():
     import random
@@ -170,6 +239,22 @@ class TrainingSchedule(BaseModel):
     type: str
     licence_requise: str
     description: str
+
+class TrainingScheduleCreate(BaseModel):
+    jour: str
+    heure_debut: str
+    heure_fin: str
+    type: str
+    licence_requise: str
+    description: str
+
+class TrainingScheduleUpdate(BaseModel):
+    jour: Optional[str] = None
+    heure_debut: Optional[str] = None
+    heure_fin: Optional[str] = None
+    type: Optional[str] = None
+    licence_requise: Optional[str] = None
+    description: Optional[str] = None
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
@@ -875,8 +960,116 @@ async def create_news(news_data: NewsCreate, current_user: dict = Depends(get_cu
 
 @api_router.get("/training-schedule", response_model=List[TrainingSchedule])
 async def get_training_schedule():
-    schedules = await db.training_schedule.find({}, {"_id": 0}).to_list(100)
-    return schedules
+    try:
+        if db is None:
+            return FALLBACK_DATA["training_schedule"]
+        schedules = await db.training_schedule.find({}, {"_id": 0}).to_list(100)
+        return schedules
+    except Exception as e:
+        logger.warning(f"Error fetching from MongoDB: {e}. Using fallback data.")
+        return FALLBACK_DATA["training_schedule"]
+
+@api_router.post("/training-schedule", response_model=TrainingSchedule)
+async def create_training_schedule(training_data: TrainingScheduleCreate, current_user: dict = Depends(get_current_referent)):
+    import uuid
+    training_id = str(uuid.uuid4())
+    
+    training_doc = {
+        "id": training_id,
+        "jour": training_data.jour,
+        "heure_debut": training_data.heure_debut,
+        "heure_fin": training_data.heure_fin,
+        "type": training_data.type,
+        "licence_requise": training_data.licence_requise,
+        "description": training_data.description
+    }
+    
+    try:
+        if db is None:
+            FALLBACK_DATA["training_schedule"].append(training_doc)
+        else:
+            await db.training_schedule.insert_one(training_doc)
+    except Exception as e:
+        logger.warning(f"Error inserting to MongoDB: {e}. Using fallback.")
+        FALLBACK_DATA["training_schedule"].append(training_doc)
+    
+    return TrainingSchedule(**training_doc)
+
+@api_router.put("/training-schedule/{training_id}", response_model=TrainingSchedule)
+async def update_training_schedule(training_id: str, training_data: TrainingScheduleUpdate, current_user: dict = Depends(get_current_referent)):
+    update_fields = {}
+    
+    if training_data.jour is not None:
+        update_fields["jour"] = training_data.jour
+    if training_data.heure_debut is not None:
+        update_fields["heure_debut"] = training_data.heure_debut
+    if training_data.heure_fin is not None:
+        update_fields["heure_fin"] = training_data.heure_fin
+    if training_data.type is not None:
+        update_fields["type"] = training_data.type
+    if training_data.licence_requise is not None:
+        update_fields["licence_requise"] = training_data.licence_requise
+    if training_data.description is not None:
+        update_fields["description"] = training_data.description
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    
+    try:
+        if db is None:
+            # Update in fallback
+            for training in FALLBACK_DATA["training_schedule"]:
+                if training["id"] == training_id:
+                    training.update(update_fields)
+                    return TrainingSchedule(**training)
+            raise HTTPException(status_code=404, detail="Training schedule not found")
+        else:
+            result = await db.training_schedule.update_one(
+                {"id": training_id},
+                {"$set": update_fields}
+            )
+            
+            if result.matched_count == 0:
+                raise HTTPException(status_code=404, detail="Training schedule not found")
+            
+            updated_training = await db.training_schedule.find_one({"id": training_id}, {"_id": 0})
+            return TrainingSchedule(**updated_training)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.warning(f"Error updating in MongoDB: {e}. Using fallback.")
+        for training in FALLBACK_DATA["training_schedule"]:
+            if training["id"] == training_id:
+                training.update(update_fields)
+                return TrainingSchedule(**training)
+        raise HTTPException(status_code=404, detail="Training schedule not found")
+
+@api_router.delete("/training-schedule/{training_id}")
+async def delete_training_schedule(training_id: str, current_user: dict = Depends(get_current_referent)):
+    try:
+        if db is None:
+            # Delete from fallback
+            original_len = len(FALLBACK_DATA["training_schedule"])
+            FALLBACK_DATA["training_schedule"] = [t for t in FALLBACK_DATA["training_schedule"] if t["id"] != training_id]
+            if len(FALLBACK_DATA["training_schedule"]) < original_len:
+                return {"message": "Training schedule deleted successfully"}
+            raise HTTPException(status_code=404, detail="Training schedule not found")
+        else:
+            result = await db.training_schedule.delete_one({"id": training_id})
+            
+            if result.deleted_count == 0:
+                raise HTTPException(status_code=404, detail="Training schedule not found")
+            
+            return {"message": "Training schedule deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.warning(f"Error deleting from MongoDB: {e}. Using fallback.")
+        original_len = len(FALLBACK_DATA["training_schedule"])
+        FALLBACK_DATA["training_schedule"] = [t for t in FALLBACK_DATA["training_schedule"] if t["id"] != training_id]
+        if len(FALLBACK_DATA["training_schedule"]) < original_len:
+            return {"message": "Training schedule deleted successfully"}
+        raise HTTPException(status_code=404, detail="Training schedule not found")
 
 @api_router.get("/rankings", response_model=List[User])
 async def get_rankings():
@@ -1089,6 +1282,107 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
+@app.on_event("startup")
+async def startup_db_seed():
+    """Initialize database with seed data on startup"""
+    try:
+        achievements_count = await db.achievements.count_documents({})
+        if achievements_count == 0:
+            achievements = [
+                {
+                    "id": "membre_fidele",
+                    "nom": "Membre Fidèle",
+                    "description": "Participer à 10 événements du club",
+                    "icone": "🏐",
+                    "points": 100
+                },
+                {
+                    "id": "toujours_present",
+                    "nom": "Toujours Présent",
+                    "description": "Participer à 20 événements du club",
+                    "icone": "⭐",
+                    "points": 250
+                },
+                {
+                    "id": "veteran",
+                    "nom": "Vétéran",
+                    "description": "Participer à 50 événements du club",
+                    "icone": "👑",
+                    "points": 500
+                },
+                {
+                    "id": "premier_tournoi",
+                    "nom": "Premier Tournoi",
+                    "description": "S'inscrire à son premier tournoi",
+                    "icone": "🎯",
+                    "points": 50
+                },
+                {
+                    "id": "champion",
+                    "nom": "Champion du Club",
+                    "description": "Gagner 3 tournois",
+                    "icone": "🏆",
+                    "points": 1000
+                }
+            ]
+            await db.achievements.insert_many(achievements)
+        
+        training_count = await db.training_schedule.count_documents({})
+        if training_count == 0:
+            schedules = [
+                {
+                    "id": "lundi_entrainement",
+                    "jour": "Lundi",
+                    "heure_debut": "18:00",
+                    "heure_fin": "20:00",
+                    "type": "Entraînement",
+                    "licence_requise": "competition",
+                    "description": "Entraînement dirigé pour les licenciés Compétition"
+                },
+                {
+                    "id": "lundi_jeu_livre",
+                    "jour": "Lundi",
+                    "heure_debut": "20:00",
+                    "heure_fin": "22:00",
+                    "type": "Jeu Libre",
+                    "licence_requise": "tous",
+                    "description": "Jeu libre ouvert à tous les licenciés"
+                },
+                {
+                    "id": "mercredi_entrainement",
+                    "jour": "Mercredi",
+                    "heure_debut": "18:00",
+                    "heure_fin": "20:00",
+                    "type": "Entraînement",
+                    "licence_requise": "competition",
+                    "description": "Entraînement dirigé pour les licenciés Compétition"
+                },
+                {
+                    "id": "mercredi_jeu_livre",
+                    "jour": "Mercredi",
+                    "heure_debut": "20:00",
+                    "heure_fin": "22:00",
+                    "type": "Jeu Libre",
+                    "licence_requise": "tous",
+                    "description": "Jeu libre ouvert à tous les licenciés"
+                },
+                {
+                    "id": "vendredi_jeu_livre",
+                    "jour": "Vendredi",
+                    "heure_debut": "18:00",
+                    "heure_fin": "22:00",
+                    "type": "Jeu Livre",
+                    "licence_requise": "tous",
+                    "description": "Jeu libre ouvert à tous les licenciés"
+                }
+            ]
+            await db.training_schedule.insert_many(schedules)
+        
+        logger.info("✓ Database seed completed successfully")
+    except Exception as e:
+        logger.error(f"Error during startup seed: {e}")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
-    client.close()
+    if client is not None:
+        client.close()

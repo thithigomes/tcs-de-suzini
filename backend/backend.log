@@ -1,0 +1,630 @@
+nohup: ignoring input
+INFO:     Started server process [57677]
+INFO:     Waiting for application startup.
+2026-01-08 20:44:22,495 - server - ERROR - Error during startup seed: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-01-08 20:44:30,154 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:34420 - "GET /api/training-schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50332 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+2026-01-08 20:48:33,177 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:52326 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:49:43,305 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:59432 - "GET /api/training-schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47464 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:47464 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:47460 - "POST /api/seed-data HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 108, in _resolve_uri
+    results = _resolve(
+        "_" + self.__srv + "._tcp." + self.__fqdn, "SRV", lifetime=self.__connect_timeout
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 53, in _resolve
+    return resolver.resolve(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1572, in resolve
+    return get_default_resolver().resolve(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        qname,
+        ^^^^^^
+    ...<7 lines>...
+        search,
+        ^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1314, in resolve
+    (request, answer) = resolution.next_request()
+                        ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 758, in next_request
+    raise NXDOMAIN(qnames=self.qnames_to_try, responses=self.nxdomain_responses)
+dns.resolver.NXDOMAIN: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1135, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/backend/server.py", line 1132, in seed_data
+    achievements_count = await db.achievements.count_documents({})
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2163, in count_documents
+    return self._retryable_non_cursor_read(_cmd, session, _Op.COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2177, in _retryable_non_cursor_read
+    return client._retryable_read(func, self._read_preference_for(s), s, operation)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2048, in _retryable_read
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func,
+        ^^^^^
+    ...<7 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+           ~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2908, in _read
+    self._server = self._get_server()
+                   ~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2856, in _get_server
+    return self._client._select_server(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._server_selector,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=self._operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1820, in _select_server
+    topology = self._get_topology()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1758, in _get_topology
+    self._resolve_srv()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 910, in _resolve_srv
+    res = uri_parser._parse_srv(
+        entity,
+    ...<6 lines>...
+        srv_max_hosts=srv_max_hosts,
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/uri_parser.py", line 168, in _parse_srv
+    nodes = dns_resolver.get_hosts()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 148, in get_hosts
+    _, nodes = self._get_srv_response_and_hosts(True)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 122, in _get_srv_response_and_hosts
+    results = self._resolve_uri(encapsulate_errors)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 116, in _resolve_uri
+    raise ConfigurationError(str(exc)) from exc
+pymongo.errors.ConfigurationError: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+INFO:     127.0.0.1:47454 - "POST /api/seed-data HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 108, in _resolve_uri
+    results = _resolve(
+        "_" + self.__srv + "._tcp." + self.__fqdn, "SRV", lifetime=self.__connect_timeout
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 53, in _resolve
+    return resolver.resolve(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1572, in resolve
+    return get_default_resolver().resolve(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        qname,
+        ^^^^^^
+    ...<7 lines>...
+        search,
+        ^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1314, in resolve
+    (request, answer) = resolution.next_request()
+                        ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 758, in next_request
+    raise NXDOMAIN(qnames=self.qnames_to_try, responses=self.nxdomain_responses)
+dns.resolver.NXDOMAIN: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1135, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/backend/server.py", line 1132, in seed_data
+    achievements_count = await db.achievements.count_documents({})
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2163, in count_documents
+    return self._retryable_non_cursor_read(_cmd, session, _Op.COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2177, in _retryable_non_cursor_read
+    return client._retryable_read(func, self._read_preference_for(s), s, operation)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2048, in _retryable_read
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func,
+        ^^^^^
+    ...<7 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+           ~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2908, in _read
+    self._server = self._get_server()
+                   ~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2856, in _get_server
+    return self._client._select_server(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._server_selector,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=self._operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1820, in _select_server
+    topology = self._get_topology()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1758, in _get_topology
+    self._resolve_srv()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 910, in _resolve_srv
+    res = uri_parser._parse_srv(
+        entity,
+    ...<6 lines>...
+        srv_max_hosts=srv_max_hosts,
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/uri_parser.py", line 168, in _parse_srv
+    nodes = dns_resolver.get_hosts()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 148, in get_hosts
+    _, nodes = self._get_srv_response_and_hosts(True)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 122, in _get_srv_response_and_hosts
+    results = self._resolve_uri(encapsulate_errors)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 116, in _resolve_uri
+    raise ConfigurationError(str(exc)) from exc
+pymongo.errors.ConfigurationError: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+INFO:     127.0.0.1:55696 - "OPTIONS /api/rankings HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55702 - "OPTIONS /api/rankings HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55702 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55696 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55696 - "OPTIONS /api/matches HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55702 - "OPTIONS /api/matches HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55702 - "OPTIONS /api/tournaments HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55696 - "OPTIONS /api/tournaments HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55696 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:55702 - "OPTIONS /api/training-schedule HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53622 - "POST /api/seed-data HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 108, in _resolve_uri
+    results = _resolve(
+        "_" + self.__srv + "._tcp." + self.__fqdn, "SRV", lifetime=self.__connect_timeout
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 53, in _resolve
+    return resolver.resolve(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1572, in resolve
+    return get_default_resolver().resolve(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        qname,
+        ^^^^^^
+    ...<7 lines>...
+        search,
+        ^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1314, in resolve
+    (request, answer) = resolution.next_request()
+                        ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 758, in next_request
+    raise NXDOMAIN(qnames=self.qnames_to_try, responses=self.nxdomain_responses)
+dns.resolver.NXDOMAIN: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1135, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/backend/server.py", line 1132, in seed_data
+    achievements_count = await db.achievements.count_documents({})
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2163, in count_documents
+    return self._retryable_non_cursor_read(_cmd, session, _Op.COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2177, in _retryable_non_cursor_read
+    return client._retryable_read(func, self._read_preference_for(s), s, operation)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2048, in _retryable_read
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func,
+        ^^^^^
+    ...<7 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+           ~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2908, in _read
+    self._server = self._get_server()
+                   ~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2856, in _get_server
+    return self._client._select_server(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._server_selector,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=self._operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1820, in _select_server
+    topology = self._get_topology()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1758, in _get_topology
+    self._resolve_srv()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 910, in _resolve_srv
+    res = uri_parser._parse_srv(
+        entity,
+    ...<6 lines>...
+        srv_max_hosts=srv_max_hosts,
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/uri_parser.py", line 168, in _parse_srv
+    nodes = dns_resolver.get_hosts()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 148, in get_hosts
+    _, nodes = self._get_srv_response_and_hosts(True)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 122, in _get_srv_response_and_hosts
+    results = self._resolve_uri(encapsulate_errors)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 116, in _resolve_uri
+    raise ConfigurationError(str(exc)) from exc
+pymongo.errors.ConfigurationError: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+INFO:     127.0.0.1:53638 - "POST /api/seed-data HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 108, in _resolve_uri
+    results = _resolve(
+        "_" + self.__srv + "._tcp." + self.__fqdn, "SRV", lifetime=self.__connect_timeout
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 53, in _resolve
+    return resolver.resolve(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1572, in resolve
+    return get_default_resolver().resolve(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        qname,
+        ^^^^^^
+    ...<7 lines>...
+        search,
+        ^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 1314, in resolve
+    (request, answer) = resolution.next_request()
+                        ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/dns/resolver.py", line 758, in next_request
+    raise NXDOMAIN(qnames=self.qnames_to_try, responses=self.nxdomain_responses)
+dns.resolver.NXDOMAIN: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 410, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 1135, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/backend/server.py", line 1132, in seed_data
+    achievements_count = await db.achievements.count_documents({})
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2163, in count_documents
+    return self._retryable_non_cursor_read(_cmd, session, _Op.COUNT)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/collection.py", line 2177, in _retryable_non_cursor_read
+    return client._retryable_read(func, self._read_preference_for(s), s, operation)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2048, in _retryable_read
+    return self._retry_internal(
+           ~~~~~~~~~~~~~~~~~~~~^
+        func,
+        ^^^^^
+    ...<7 lines>...
+        operation_id=operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+      ~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2763, in run
+    return self._read() if self._is_read else self._write()
+           ~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2908, in _read
+    self._server = self._get_server()
+                   ~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 2856, in _get_server
+    return self._client._select_server(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._server_selector,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        operation_id=self._operation_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1820, in _select_server
+    topology = self._get_topology()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 1758, in _get_topology
+    self._resolve_srv()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/mongo_client.py", line 910, in _resolve_srv
+    res = uri_parser._parse_srv(
+        entity,
+    ...<6 lines>...
+        srv_max_hosts=srv_max_hosts,
+    )
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/uri_parser.py", line 168, in _parse_srv
+    nodes = dns_resolver.get_hosts()
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 148, in get_hosts
+    _, nodes = self._get_srv_response_and_hosts(True)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 122, in _get_srv_response_and_hosts
+    results = self._resolve_uri(encapsulate_errors)
+  File "/home/ermak/tcs-voleyball/.venv/lib/python3.13/site-packages/pymongo/synchronous/srv_resolver.py", line 116, in _resolve_uri
+    raise ConfigurationError(str(exc)) from exc
+pymongo.errors.ConfigurationError: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.
+INFO:     127.0.0.1:33640 - "OPTIONS /api/tournaments HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:33640 - "OPTIONS /api/tournaments HTTP/1.1" 400 Bad Request
+2026-01-08 20:50:52,593 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:33650 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:50:52,599 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:51456 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:50:52,603 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:51456 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:52:50,407 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:46628 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:55:29,270 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:41490 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:56:21,476 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:42912 - "GET /api/training-schedule HTTP/1.1" 200 OK
+2026-01-08 20:56:22,709 - server - WARNING - Error fetching from MongoDB: The DNS query name does not exist: _mongodb._tcp.cluster0.mongodb.net.. Using fallback data.
+INFO:     127.0.0.1:49020 - "GET /api/training-schedule HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49030 - "OPTIONS /api/training-schedule HTTP/1.1" 200 OK

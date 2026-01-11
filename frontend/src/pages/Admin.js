@@ -9,7 +9,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { Trophy, Newspaper, Calendar, Plus } from 'lucide-react';
+import { Trophy, Newspaper, Calendar, Plus, Dumbbell, Edit, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Admin() {
@@ -35,6 +35,42 @@ export default function Admin() {
     heure: '',
     lieu: 'Salle TCS Suzini'
   });
+
+  const [trainingData, setTrainingData] = useState({
+    jour: '',
+    heure_debut: '',
+    heure_fin: '',
+    type: 'Entraînement',
+    licence_requise: 'competition',
+    description: ''
+  });
+
+  const [trainings, setTrainings] = useState([]);
+  const [editingTrainingId, setEditingTrainingId] = useState(null);
+  const [loadingTrainings, setLoadingTrainings] = useState(true);
+
+  useEffect(() => {
+    fetchTrainings();
+  }, [token]);
+
+  const fetchTrainings = async () => {
+    try {
+      setLoadingTrainings(true);
+      const response = await axios.get(`${API}/training-schedule`, {
+        timeout: 10000,
+        headers: {}
+      });
+      console.log('✓ Trainings loaded:', response.data);
+      setTrainings(response.data || []);
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || error.message || 'Erreur inconnue';
+      console.error('✗ Error fetching trainings:', errorMsg);
+      toast.error('Erreur lors du chargement des treinos: ' + errorMsg);
+      setTrainings([]);
+    } finally {
+      setLoadingTrainings(false);
+    }
+  };
 
   const handleCreateTournament = async (e) => {
     e.preventDefault();
@@ -87,6 +123,73 @@ export default function Admin() {
     }
   };
 
+  const handleCreateOrUpdateTraining = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingTrainingId) {
+        await axios.put(`${API}/training-schedule/${editingTrainingId}`, trainingData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Treino atualizado com sucesso!');
+        setEditingTrainingId(null);
+      } else {
+        await axios.post(`${API}/training-schedule`, trainingData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Treino criado com sucesso!');
+      }
+      setTrainingData({
+        jour: '',
+        heure_debut: '',
+        heure_fin: '',
+        type: 'Entraînement',
+        licence_requise: 'competition',
+        description: ''
+      });
+      fetchTrainings();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Erro ao salvar o treino');
+    }
+  };
+
+  const handleEditTraining = (training) => {
+    setTrainingData({
+      jour: training.jour,
+      heure_debut: training.heure_debut,
+      heure_fin: training.heure_fin,
+      type: training.type,
+      licence_requise: training.licence_requise,
+      description: training.description
+    });
+    setEditingTrainingId(training.id);
+  };
+
+  const handleDeleteTraining = async (trainingId) => {
+    if (window.confirm('Tem certeza que deseja deletar este treino?')) {
+      try {
+        await axios.delete(`${API}/training-schedule/${trainingId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Treino deletado com sucesso!');
+        fetchTrainings();
+      } catch (error) {
+        toast.error(error.response?.data?.detail || 'Erro ao deletar o treino');
+      }
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTrainingId(null);
+    setTrainingData({
+      jour: '',
+      heure_debut: '',
+      heure_fin: '',
+      type: 'Entraînement',
+      licence_requise: 'competition',
+      description: ''
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#FFF7ED]">
       <Navbar />
@@ -97,7 +200,7 @@ export default function Admin() {
         </div>
 
         <Tabs defaultValue="tournaments" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8" data-testid="admin-tabs">
+          <TabsList className="grid w-full grid-cols-4 mb-8" data-testid="admin-tabs">
             <TabsTrigger value="tournaments" data-testid="tab-tournaments">
               <Trophy className="w-4 h-4 mr-2" />
               Tournois
@@ -109,6 +212,10 @@ export default function Admin() {
             <TabsTrigger value="matches" data-testid="tab-matches">
               <Calendar className="w-4 h-4 mr-2" />
               Matchs
+            </TabsTrigger>
+            <TabsTrigger value="trainings" data-testid="tab-trainings">
+              <Dumbbell className="w-4 h-4 mr-2" />
+              Treinos
             </TabsTrigger>
           </TabsList>
 
@@ -312,6 +419,185 @@ export default function Admin() {
                 </form>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="trainings">
+            <div className="space-y-6">
+              <Card className="glass-card" data-testid="create-training-card">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-anton uppercase text-[#064E3B] flex items-center">
+                    <Plus className="w-6 h-6 mr-2" />
+                    {editingTrainingId ? 'Editar Treino' : 'Criar Treino'}
+                  </CardTitle>
+                  <CardDescription>
+                    {editingTrainingId ? 'Atualize os detalhes do treino' : 'Adicionar novo treino ao calendário'}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleCreateOrUpdateTraining} className="space-y-4" data-testid="training-form">
+                    <div>
+                      <Label htmlFor="training-jour">Dia da Semana</Label>
+                      <select
+                        id="training-jour"
+                        data-testid="training-day-input"
+                        value={trainingData.jour}
+                        onChange={(e) => setTrainingData({ ...trainingData, jour: e.target.value })}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      >
+                        <option value="">Selecione um dia</option>
+                        <option value="Lundi">Segunda-feira</option>
+                        <option value="Mardi">Terça-feira</option>
+                        <option value="Mercredi">Quarta-feira</option>
+                        <option value="Jeudi">Quinta-feira</option>
+                        <option value="Vendredi">Sexta-feira</option>
+                        <option value="Samedi">Sábado</option>
+                        <option value="Dimanche">Domingo</option>
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="training-heure-debut">Hora de Início</Label>
+                        <Input
+                          id="training-heure-debut"
+                          data-testid="training-start-time-input"
+                          type="time"
+                          value={trainingData.heure_debut}
+                          onChange={(e) => setTrainingData({ ...trainingData, heure_debut: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="training-heure-fin">Hora de Fim</Label>
+                        <Input
+                          id="training-heure-fin"
+                          data-testid="training-end-time-input"
+                          type="time"
+                          value={trainingData.heure_fin}
+                          onChange={(e) => setTrainingData({ ...trainingData, heure_fin: e.target.value })}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="training-type">Tipo de Treino</Label>
+                        <select
+                          id="training-type"
+                          data-testid="training-type-input"
+                          value={trainingData.type}
+                          onChange={(e) => setTrainingData({ ...trainingData, type: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="Entraînement">Entraînement</option>
+                          <option value="Jeu Libre">Jeu Libre</option>
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="training-licence">Licença Requerida</Label>
+                        <select
+                          id="training-licence"
+                          data-testid="training-license-input"
+                          value={trainingData.licence_requise}
+                          onChange={(e) => setTrainingData({ ...trainingData, licence_requise: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="competition">Compétition</option>
+                          <option value="tous">Todos</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="training-description">Descrição</Label>
+                      <Textarea
+                        id="training-description"
+                        data-testid="training-description-input"
+                        value={trainingData.description}
+                        onChange={(e) => setTrainingData({ ...trainingData, description: e.target.value })}
+                        rows={3}
+                        required
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button type="submit" className="flex-1 btn-primary" data-testid="create-training-button">
+                        {editingTrainingId ? 'Atualizar Treino' : 'Criar Treino'}
+                      </Button>
+                      {editingTrainingId && (
+                        <Button type="button" variant="outline" onClick={handleCancelEdit} className="flex-1">
+                          Cancelar
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card" data-testid="trainings-list-card">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-anton uppercase text-[#064E3B] flex items-center">
+                    <Dumbbell className="w-6 h-6 mr-2" />
+                    Treinos Existentes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {loadingTrainings ? (
+                    <p className="text-gray-600">Carregando treinos...</p>
+                  ) : trainings.length === 0 ? (
+                    <p className="text-gray-600">Nenhum treino cadastrado</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {trainings.map((training) => (
+                        <div key={training.id} className="p-4 border border-gray-200 rounded-lg">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <h3 className="font-bold text-lg text-[#064E3B]">
+                                  {training.jour}
+                                </h3>
+                                <span className={`px-2 py-1 text-xs font-bold rounded ${
+                                  training.type === 'Entraînement'
+                                    ? 'bg-orange-100 text-orange-700'
+                                    : 'bg-green-100 text-green-700'
+                                }`}>
+                                  {training.type}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-1">
+                                ⏰ {training.heure_debut} - {training.heure_fin}
+                              </p>
+                              <p className="text-sm text-gray-600 mb-1">
+                                🎫 {training.licence_requise === 'competition' ? 'Compétition' : 'Todos'}
+                              </p>
+                              <p className="text-sm text-gray-700">{training.description}</p>
+                            </div>
+                            <div className="flex gap-2 ml-4">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleEditTraining(training)}
+                                data-testid={`edit-training-${training.id}`}
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDeleteTraining(training.id)}
+                                data-testid={`delete-training-${training.id}`}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

@@ -6,7 +6,7 @@ export default function VolleyballEmojis() {
     if (!container) return;
 
     const emojis = [];
-    const emojiCount = 8;
+    const emojiCount = 15;
 
     for (let i = 0; i < emojiCount; i++) {
       const emoji = document.createElement('div');

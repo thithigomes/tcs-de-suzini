@@ -51,11 +51,6 @@ export default function Dashboard() {
     };
     fetchDashboardData();
   }, [user, token]);
-      }
-    };
-
-    fetchDashboardData();
-  }, [token]);
 
   const quickStats = [
     { title: 'Tournois Actifs', value: stats.tournaments, emoji: '🏆', color: 'from-[#FF6B35] to-[#ff8854]', link: '/tournaments' },

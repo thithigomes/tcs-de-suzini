@@ -1329,13 +1329,9 @@ function updateAdvancedStats() {
         const rank = ranking.findIndex(r => r.email === currentUser.email) + 1;
         globalRankEl.textContent = `#${rank} / ${ranking.length}`;
     }
-}
-        }
-    }
     
     // Badges
     const badgeEl = document.getElementById('profileBadgeCount');
     if (badgeEl) badgeEl.textContent = userBadges.length;
-}
 }
 

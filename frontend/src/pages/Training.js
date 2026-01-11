@@ -12,24 +12,32 @@ export default function Training() {
   const { token, user } = useContext(AuthContext);
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
+        setError(null);
+        setLoading(true);
         const response = await axios.get(`${API}/training-schedule`, {
-          headers: { Authorization: `Bearer ${token}` }
+          timeout: 10000,
+          headers: {}
         });
-        setSchedules(response.data);
+        console.log('✓ Schedules loaded:', response.data);
+        setSchedules(response.data || []);
       } catch (error) {
-        console.error('Error fetching schedules:', error);
-        toast.error('Erreur lors du chargement des horaires');
+        const errorMsg = error.response?.data?.detail || error.message || 'Erreur inconnue';
+        console.error('✗ Error fetching schedules:', errorMsg);
+        setError(errorMsg);
+        toast.error('Erreur lors du chargement des horaires: ' + errorMsg);
+        setSchedules([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSchedules();
-  }, [token]);
+  }, []);
 
   const canAccess = (schedule) => {
     if (schedule.licence_requise === 'tous') return true;

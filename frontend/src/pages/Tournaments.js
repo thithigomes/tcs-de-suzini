@@ -124,23 +124,17 @@ export default function Tournaments() {
                   </div>
                   <div className="flex items-center text-sm text-gray-400">
                     <span className="mr-2">👥</span>
-                    <span>{tournament.participants.length}/{tournament.max_participants} participants</span>
+                    <span>{tournament.participants_actuels || 0}/{tournament.participants_max || tournament.max_participants || 16} participants</span>
                   </div>
-                  {tournament.est_payant && (
-                    <div className="flex items-center text-sm font-bold text-[#FF6B35]">
-                      <span className="mr-2">💰</span>
-                      <span>{tournament.prix}€</span>
-                    </div>
-                  )}
 
-                  {tournament.statut === 'à_venir' && (
+                  {tournament.statut === 'inscriptions_ouvertes' && (
                     <Button
                       onClick={() => handleRegister(tournament.id)}
                       className="w-full btn-primary mt-4"
-                      disabled={tournament.participants.includes(user?.id) || tournament.participants.length >= tournament.max_participants}
+                      disabled={(tournament.participants_actuels || 0) >= (tournament.participants_max || tournament.max_participants || 16)}
                       data-testid={`tournament-register-button-${index}`}
                     >
-                      {tournament.participants.includes(user?.id) ? '✓ Inscrit' : tournament.participants.length >= tournament.max_participants ? 'Complet' : "S'inscrire"}
+                      {(tournament.participants_actuels || 0) >= (tournament.participants_max || tournament.max_participants || 16) ? 'Complet' : "S'inscrire"}
                     </Button>
                   )}
                 </CardContent>

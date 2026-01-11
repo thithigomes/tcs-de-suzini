@@ -17,9 +17,9 @@ import ResetPassword from "./pages/ResetPassword";
 
 // IMPORTANT: Set REACT_APP_BACKEND_URL environment variable in Vercel dashboard
 // Example: https://your-backend-url.railway.app or https://your-backend-url.onrender.com
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-if (!BACKEND_URL) {
-  console.warn("⚠️  REACT_APP_BACKEND_URL is not configured. Please set it in your environment variables.");
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+if (!process.env.REACT_APP_BACKEND_URL) {
+  console.warn("⚠️  REACT_APP_BACKEND_URL is not configured. Using default: http://localhost:8000");
 }
 export const API = `${BACKEND_URL}/api`;
 
@@ -56,8 +56,10 @@ function App() {
           setUser(response.data);
         } catch (error) {
           console.error('Error fetching user:', error);
-          localStorage.removeItem('token');
-          setToken(null);
+          // NÃO fazer logout automático - manter token válido mesmo se API falhar
+          // localStorage.removeItem('token');
+          // setToken(null);
+          setUser(null); // Apenas limpar user, mas manter token
         }
       }
       setLoading(false);
